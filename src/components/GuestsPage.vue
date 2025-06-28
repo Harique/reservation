@@ -1,12 +1,10 @@
 <script setup>
 import SideBar from './SideBar.vue';
+import FilterBar from './FilterBar.vue';
 </script>
 
 <template>
-    <SideBar />
-    <div>
-        HIIIIIIIII PAGE 2
-    </div>
+    <FilterBar></FilterBar>
 </template>
 
 <style scoped>

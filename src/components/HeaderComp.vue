@@ -1,15 +1,23 @@
-<script setup></script>
+<script setup lang="ts">
+import { useRoute } from 'vue-router';
+
+const router = useRoute()
+
+const pageName = () => {
+  return router.name?.toString()
+}
+</script>
 
 <template>
-  <div class="container">
+  <div class="container" id="Header">
     <div class="header">
       <div class="page-progress">
-        <img src="general.png" alt="home icon" />
-        <img src="right.png" alt="right arrow" />
-        <H1>Rooms</H1>
+        <img src="/public/general.png" alt="home icon" />
+        <img src="/public/right.png" alt="right arrow" />
+        <H1>{{ pageName() }}</H1>
       </div>
 
-      <h1 class="header-title">Rooms</h1>
+      <h1 class="header-title">{{ pageName() }}</h1>
       <h5 class="header-info">List of all rooms with guests who are either residing or have reserved it for a later date</h5>
     </div>
   </div>

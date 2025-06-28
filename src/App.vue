@@ -1,34 +1,23 @@
-<script>
+<script setup>
+import HeaderComp from "./components/HeaderComp.vue";
 import RoomPage from "./components/RoomPage.vue";
-
-export default {
-  name: "App",
-  components: {
-    RoomPage,
-  },
-};
+import SideBar from "./components/SideBar.vue";
 </script>
 
 <template>
   <div class="container">
-    
-    <RoomPage />
+    <SideBar />
+    <div class="content-container">
+      <HeaderComp />
+      <div class="content">
+        <router-view></router-view>
+      </div>
+    </div>
   </div>
 </template>
 
 <style>
 /* In your main CSS file or <style> section */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html,
-body {
-  height: 100%;
-  width: 100%;
-}
 
 #app {
   height: 100vh;
@@ -40,5 +29,18 @@ body {
   flex-direction: row;
   height: 100%;
   width: 100%;
+}
+.content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 30px 40px 40px 40px;
+}
+.content-container{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
 }
 </style>

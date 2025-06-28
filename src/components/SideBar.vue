@@ -1,61 +1,61 @@
 <script setup lang="ts">
+import { useRouter } from "vue-router";
 
-const navigate = (pageName:string) =>{
-
+const router = useRouter();
+function navigate(pageName: string, params?: Record<string, any>) {
+  router.push({
+    name: pageName,
+    params: params || {},
+  });
 }
-
-
 </script>
 
 <template>
   <div class="sideBar">
     <div class="title">
       <P>LE DÉCLIC RESIDENCE</P>
-      <img src="/left-square.png" alt="left-square">
+      <img src="/left-square.png" alt="left-square" />
     </div>
     <div class="dashboard">
       <p class="title">DASHBOARD</p>
       <div class="tabs">
 
-        <div class="tab">
+        <div class="tab" @click="navigate('Rooms')">
           <div class="left">
-            <img src="delivery-door.png" alt="">
+            <img src="/public/delivery-door.png" alt="" />
             <h1>Rooms</h1>
           </div>
-          <img src="/down.png" alt="right-arrow">
+          <img src="/down.png" alt="right-arrow" />
         </div>
 
-        <div class="tab">
+        <div class="tab" @click="navigate('Guests')">
           <div class="left">
-            <img src="user-edit.png" alt="">
+            <img src="/public/user-edit.png" alt="" />
             <h1>Guests</h1>
           </div>
-          <img src="/down.png" alt="right-arrow">
+          <img src="/down.png" alt="right-arrow" />
         </div>
 
         <div class="tab">
           <div class="left">
-            <img src="book-open.png" alt="">
+            <img src="/public/book-open.png" alt="" />
             <h1>Logs</h1>
           </div>
-          <img src="/down.png" alt="right-arrow">
+          <img src="/down.png" alt="right-arrow" />
         </div>
-        
-
       </div>
     </div>
     <div class="help">
       <div class="help-text">
-        <img src="rescue.png" alt="Help">
+        <img src="/public/rescue.png" alt="Help" />
         <h1>Help</h1>
       </div>
-      
     </div>
   </div>
 </template>
 
 <style scoped>
-.sideBar{
+.sideBar {
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -66,7 +66,7 @@ const navigate = (pageName:string) =>{
   padding-bottom: 40px;
   gap: 25px;
 }
-.title{
+.title {
   display: flex;
   align-items: center;
   max-height: 30px;
@@ -74,35 +74,34 @@ const navigate = (pageName:string) =>{
   font-weight: 600;
   line-height: 18px;
   font-size: 18px;
-  color: #FFFFFF;
+  color: #ffffff;
   justify-content: space-between;
   padding: 0 50px 0 40px;
 }
-.dashboard{
+.dashboard {
   display: flex;
   flex-direction: column;
   padding: 0 50px 25px 40px;
   gap: 5px;
   height: 100%;
   max-height: 188px;
-  border-bottom: 1px solid #3F4254;
-
+  border-bottom: 1px solid #3f4254;
 }
-.dashboard .title{
+.dashboard .title {
   padding: 0;
   font-size: 13px;
   line-height: 14px;
   font-weight: 600;
-  color: #3F4254;
+  color: #3f4254;
 }
-.dashboard .tabs{
+.dashboard .tabs {
   display: flex;
   flex-direction: column;
   height: 100%;
   max-height: 144px;
   width: 100%;
 }
-.dashboard .tabs .tab{
+.dashboard .tabs .tab {
   height: 100%;
   width: 100%;
   display: flex;
@@ -111,34 +110,33 @@ const navigate = (pageName:string) =>{
   justify-content: space-between;
   align-items: center;
 }
-.dashboard .tabs .tab h1{
+.dashboard .tabs .tab h1 {
   font-size: 16px;
   line-height: 16px;
   font-weight: 600;
-  color: #E1E3EA;
+  color: #e1e3ea;
 }
-.dashboard .tabs .tab .left{
+.dashboard .tabs .tab .left {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 12px;
 }
-.help{
+.help {
   height: 100%;
   display: flex;
   padding: 0 50px 15px 40px;
   justify-content: flex-end;
   flex-direction: column;
-  border-bottom: 1px solid #3F4254;
+  border-bottom: 1px solid #3f4254;
 }
-.help h1{
+.help h1 {
   font-size: 16px;
   line-height: 16px;
   font-weight: 600;
-  color: #E1E3EA;
-
+  color: #e1e3ea;
 }
-.help-text{
+.help-text {
   display: flex;
   align-items: center;
   gap: 12px;
