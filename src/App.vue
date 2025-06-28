@@ -1,26 +1,44 @@
-<template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
-</template>
-
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import RoomPage from "./components/RoomPage.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    RoomPage,
+  },
+};
 </script>
 
+<template>
+  <div class="container">
+    
+    <RoomPage />
+  </div>
+</template>
+
 <style>
+/* In your main CSS file or <style> section */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
+
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  height: 100vh;
+  width: 100vw;
+  font-family: "Inter", sans-serif;
+}
+.container {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  width: 100%;
 }
 </style>
