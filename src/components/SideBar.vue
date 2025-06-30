@@ -12,42 +12,46 @@ function navigate(pageName: string, params?: Record<string, any>) {
 
 <template>
   <div class="sideBar">
-    <div class="title">
-      <p>LE DÉCLIC RESIDENCE</p>
-    </div>
-    <div class="dashboard">
-      <p class="title">DASHBOARD</p>
-      <div class="tabs">
-
-        <div class="tab" @click="navigate('Rooms')">
-          <div class="left">
-            <img src="/delivery-door.png" alt="" />
-            <h1>Rooms</h1>
-          </div>
-          <img src="/down.png" alt="right-arrow" />
+    <div class="container">
+      <div class="container-top">
+        <div class="title">
+          <p>LE DÉCLIC RESIDENCE</p>
         </div>
 
-        <div class="tab" @click="navigate('Guests')">
-          <div class="left">
-            <img src="/user-edit.png" alt="" />
-            <h1>Guests</h1>
-          </div>
-          <img src="/down.png" alt="right-arrow" />
-        </div>
+        <div class="dashboard">
+          <p class="title">DASHBOARD</p>
+          <div class="tabs">
+            <div class="tab" @click="navigate('Rooms')">
+              <div class="left">
+                <img src="/delivery-door.png" alt="" />
+                <h1>Rooms</h1>
+              </div>
+              <img src="/down.png" alt="right-arrow" />
+            </div>
 
-        <div class="tab">
-          <div class="left">
-            <img src="/book-open.png" alt="" />
-            <h1>Logs</h1>
+            <div class="tab" @click="navigate('Guests')">
+              <div class="left">
+                <img src="/user-edit.png" alt="" />
+                <h1>Guests</h1>
+              </div>
+              <img src="/down.png" alt="right-arrow" />
+            </div>
+
+            <div class="tab">
+              <div class="left">
+                <img src="/book-open.png" alt="" />
+                <h1>Logs</h1>
+              </div>
+              <img src="/down.png" alt="right-arrow" />
+            </div>
           </div>
-          <img src="/down.png" alt="right-arrow" />
         </div>
       </div>
-    </div>
-    <div class="help">
-      <div class="help-text">
-        <img src="/rescue.png" alt="Help" />
-        <h1>Help</h1>
+      <div class="help">
+        <div class="help-text">
+          <img src="/rescue.png" alt="Help" />
+          <h1>Help</h1>
+        </div>
       </div>
     </div>
   </div>
@@ -57,10 +61,12 @@ function navigate(pageName: string, params?: Record<string, any>) {
 .sideBar {
   display: flex;
   flex-direction: column;
-  min-height: 100%;
+  height: 100vh;
   width: 100%;
   max-width: 330px;
   min-width: 290px;
+  position: sticky;
+  top: 0;
 
   background-color: #131313;
   padding-top: 40px;
@@ -122,6 +128,19 @@ function navigate(pageName: string, params?: Record<string, any>) {
   align-items: center;
   gap: 12px;
 }
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+.container-top {
+  gap: 25px;
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 40px;
+}
 .help {
   height: 100%;
   display: flex;
@@ -129,6 +148,8 @@ function navigate(pageName: string, params?: Record<string, any>) {
   justify-content: flex-end;
   flex-direction: column;
   border-bottom: 1px solid #3f4254;
+  position: sticky;
+  bottom: 25px;
 }
 .help h1 {
   font-size: 16px;
