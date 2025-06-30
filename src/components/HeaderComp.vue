@@ -9,7 +9,7 @@ const pageName = () => {
 </script>
 
 <template>
-  <div class="container" id="Header">
+  <div class="container-header" id="Header">
     <div class="header">
       <div class="page-progress">
         <img src="/public/general.png" alt="home icon" />
@@ -24,13 +24,12 @@ const pageName = () => {
 </template>
 
 <style scoped>
-.container {
+.container-header {
   display: flex;
   height: 100%;
   max-height: 126px;
   padding: 25px 40px;
   width: 100%;
-  border-bottom: 1px solid #E1E3EA;
 }
 .header {
   display: flex;

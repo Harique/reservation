@@ -5,13 +5,11 @@ import SideBar from "./components/SideBar.vue";
 </script>
 
 <template>
-  <div class="container">
-    <SideBar />
-    <div class="content-container">
-      <HeaderComp />
-      <div class="content">
-        <router-view></router-view>
-      </div>
+  <SideBar />
+  <div class="content-container">
+    <HeaderComp />
+    <div class="content">
+      <router-view></router-view>
     </div>
   </div>
 </template>
@@ -20,27 +18,36 @@ import SideBar from "./components/SideBar.vue";
 /* In your main CSS file or <style> section */
 
 #app {
-  height: 100vh;
-  width: 100vw;
+  display: flex;
+  flex-direction: row;
   font-family: "Inter", sans-serif;
+  height: 100%;
 }
-.container {
+html{
+  scroll-behavior: smooth;
+}
+body {
+  overflow-x: hidden; /* Prevent horizontal scroll */
+  word-wrap: break-word; /* Handle long text */
+}
+.container-main {
   display: flex;
   flex-direction: row;
   height: 100%;
   width: 100%;
 }
 .content {
+  border-top: 1px solid #e1e3ea;
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   padding: 30px 40px 40px 40px;
 }
-.content-container{
+.content-container {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  max-width: 100%;
   height: 100%;
 }
 </style>

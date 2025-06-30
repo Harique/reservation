@@ -6,7 +6,6 @@ import SideBar from "./SideBar.vue";
 <template>
   
   <div class="container">
-    
     <div class="Rooms">
        <div class="room">
         <img src="/public/delivery-door-big.png" alt="door">
@@ -82,9 +81,8 @@ import SideBar from "./SideBar.vue";
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
 .Rooms {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(4, 1fr);
+  display: flex;
+  flex-wrap: wrap;
   gap: 30px;
   height: 100%;
   width: 100%;

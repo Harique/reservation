@@ -13,8 +13,7 @@ function navigate(pageName: string, params?: Record<string, any>) {
 <template>
   <div class="sideBar">
     <div class="title">
-      <P>LE DÉCLIC RESIDENCE</P>
-      <img src="/left-square.png" alt="left-square" />
+      <p>LE DÉCLIC RESIDENCE</p>
     </div>
     <div class="dashboard">
       <p class="title">DASHBOARD</p>
@@ -22,7 +21,7 @@ function navigate(pageName: string, params?: Record<string, any>) {
 
         <div class="tab" @click="navigate('Rooms')">
           <div class="left">
-            <img src="/public/delivery-door.png" alt="" />
+            <img src="/delivery-door.png" alt="" />
             <h1>Rooms</h1>
           </div>
           <img src="/down.png" alt="right-arrow" />
@@ -30,7 +29,7 @@ function navigate(pageName: string, params?: Record<string, any>) {
 
         <div class="tab" @click="navigate('Guests')">
           <div class="left">
-            <img src="/public/user-edit.png" alt="" />
+            <img src="/user-edit.png" alt="" />
             <h1>Guests</h1>
           </div>
           <img src="/down.png" alt="right-arrow" />
@@ -38,7 +37,7 @@ function navigate(pageName: string, params?: Record<string, any>) {
 
         <div class="tab">
           <div class="left">
-            <img src="/public/book-open.png" alt="" />
+            <img src="/book-open.png" alt="" />
             <h1>Logs</h1>
           </div>
           <img src="/down.png" alt="right-arrow" />
@@ -47,7 +46,7 @@ function navigate(pageName: string, params?: Record<string, any>) {
     </div>
     <div class="help">
       <div class="help-text">
-        <img src="/public/rescue.png" alt="Help" />
+        <img src="/rescue.png" alt="Help" />
         <h1>Help</h1>
       </div>
     </div>
@@ -58,9 +57,11 @@ function navigate(pageName: string, params?: Record<string, any>) {
 .sideBar {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  min-height: 100%;
   width: 100%;
   max-width: 330px;
+  min-width: 290px;
+
   background-color: #131313;
   padding-top: 40px;
   padding-bottom: 40px;
@@ -69,7 +70,6 @@ function navigate(pageName: string, params?: Record<string, any>) {
 .title {
   display: flex;
   align-items: center;
-  max-height: 30px;
   width: 100%;
   font-weight: 600;
   line-height: 18px;
