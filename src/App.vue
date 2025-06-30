@@ -23,7 +23,7 @@ import SideBar from "./components/SideBar.vue";
   font-family: "Inter", sans-serif;
   height: 100%;
 }
-html{
+html {
   scroll-behavior: smooth;
 }
 body {
@@ -48,6 +48,7 @@ body {
   display: flex;
   flex-direction: column;
   max-width: 100%;
+  width: 100%;
   height: 100%;
 }
 </style>

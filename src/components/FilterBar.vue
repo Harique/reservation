@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 import Select from "./Select.vue";
 import { Input } from "@/components/ui/input";
 import CalendarPicker from "./CalendarPicker.vue";
@@ -13,13 +12,10 @@ import CalendarPicker from "./CalendarPicker.vue";
       <Input class="filter-input" placeholder="Nights" id="nights" />
       <Input class="filter-input" placeholder="Room" id="room" />
       <CalendarPicker></CalendarPicker>
-      <CalendarPicker></CalendarPicker>
-      <CalendarPicker></CalendarPicker>
-      <CalendarPicker></CalendarPicker>
-      
-
     </div>
-    <div class="create-new"></div>
+    <div class="create-new">
+      <button>hi</button>
+    </div>
   </div>
 </template>
 
@@ -40,7 +36,7 @@ import CalendarPicker from "./CalendarPicker.vue";
   line-height: 13px;
   color: #7e8299;
 }
-#name{
+#name {
   font-weight: 600;
   font-size: 13px;
   line-height: 13px;
@@ -51,6 +47,7 @@ import CalendarPicker from "./CalendarPicker.vue";
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
 }
 .filter-buttons {
   display: flex;
@@ -58,6 +55,7 @@ import CalendarPicker from "./CalendarPicker.vue";
   height: 38px;
   width: fit-content;
   gap: 15px;
+  justify-content: center;
 }
 .filter-input {
   height: 38px !important;
@@ -66,8 +64,8 @@ import CalendarPicker from "./CalendarPicker.vue";
   border-radius: 6px !important;
 }
 .create-new {
+  height: 100%;
 }
 .create-new button {
 }
-
 </style>
