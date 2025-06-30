@@ -151,6 +151,9 @@ function navigate(pageName: string, params?: Record<string, any>) {
   position: sticky;
   bottom: 25px;
 }
+.tab:hover {
+  cursor: pointer;
+}
 .help h1 {
   font-size: 16px;
   line-height: 16px;
