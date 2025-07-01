@@ -13,7 +13,6 @@ import FilterBar from "./FilterBar.vue";
 .container {
   max-width: 100%;
   width: 100%;
-  overflow-x: hidden;
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;

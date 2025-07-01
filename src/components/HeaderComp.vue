@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router';
+import { useRoute } from "vue-router";
 
-const router = useRoute()
+const router = useRoute();
 
 const pageName = () => {
-  return router.name?.toString()
-}
+  return router.name?.toString();
+};
 </script>
 
 <template>
@@ -18,7 +18,10 @@ const pageName = () => {
       </div>
 
       <h1 class="header-title">{{ pageName() }}</h1>
-      <h5 class="header-info">List of all rooms with guests who are either residing or have reserved it for a later date</h5>
+      <h5 class="header-info">
+        List of all rooms with guests who are either residing or have reserved
+        it for a later date
+      </h5>
     </div>
   </div>
 </template>
@@ -49,16 +52,16 @@ const pageName = () => {
   font-size: 13px;
   color: #3f4254;
 }
-.header-title{
-    color: #181C32;
-    font-size: 26px;
-    line-height: 26px;
-    font-weight: 600;
+.header-title {
+  color: #181c32;
+  font-size: 26px;
+  line-height: 26px;
+  font-weight: 600;
 }
-.header-info{
-    color: #A1A5B7;
-    line-height: 14px;
-    font-size: 14px;
-    font-weight: 500;
+.header-info {
+  color: #a1a5b7;
+  line-height: 14px;
+  font-size: 14px;
+  font-weight: 500;
 }
 </style>

@@ -37,7 +37,7 @@ function navigate(pageName: string, params?: Record<string, any>) {
               <img src="/down.png" alt="right-arrow" />
             </div>
 
-            <div class="tab">
+            <div class="tab" @click="navigate('Logs')">
               <div class="left">
                 <img src="/book-open.png" alt="" />
                 <h1>Logs</h1>

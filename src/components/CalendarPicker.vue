@@ -4,9 +4,9 @@ import {
   CalendarDate,
   DateFormatter,
   getLocalTimeZone,
+  today,
 } from "@internationalized/date";
 
-import { Calendar as CalendarIcon } from "lucide-vue-next";
 import { type Ref, ref } from "vue";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,21 +19,22 @@ import { RangeCalendar } from "@/components/ui/range-calendar";
 const df = new DateFormatter("en-US", {
   dateStyle: "medium",
 });
-
+const time = today("Africa/Algiers");
 const value = ref({
-  start: new CalendarDate(2022, 1, 20),
-  end: new CalendarDate(2022, 1, 20).add({ days: 20 }),
+  start: new CalendarDate(time.year, time.month, time.day),
+  end: new CalendarDate(time.year, time.month, time.day).add({ days: 20 }),
 }) as Ref<DateRange>;
 </script>
 
 <template>
-  <Popover>
+  <Popover class="">
     <PopoverTrigger as-child>
       <Button
         variant="outline"
-        :class="'w-[280px] justify-start text-left font-normal'"
+        :class="'w-[280px] justify-start text-left font-normal h-full'"
+        id="calendar"
       >
-        <CalendarIcon class="mr-2 h-4 w-4" />
+        <img src="/Calendar.png" alt="calendar" />
         <template v-if="value.start">
           <template v-if="value.end">
             {{ df.format(value.start.toDate(getLocalTimeZone())) }} -
@@ -58,4 +59,21 @@ const value = ref({
   </Popover>
 </template>
 
-<style></style>
+<style scoped>
+#calendar {
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 14px;
+  color: #7e8299;
+  border-radius: 6px;
+  max-width: 230px;
+  align-items: center;
+  justify-content: center;
+  background-color: #f1f1f2;
+  max-height: 38px;
+}
+#calendar:hover {
+  cursor: pointer;
+  background-color: oklch(0.97 0 0);
+}
+</style>
