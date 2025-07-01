@@ -12,8 +12,8 @@ const pageName = () => {
   <div class="container-header" id="Header">
     <div class="header">
       <div class="page-progress">
-        <img src="/public/general.png" alt="home icon" />
-        <img src="/public/right.png" alt="right arrow" />
+        <img src="/general.png" alt="home icon" />
+        <img src="/right.png" alt="right arrow" />
         <H1>{{ pageName() }}</H1>
       </div>
 

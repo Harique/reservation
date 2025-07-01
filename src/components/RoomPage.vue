@@ -7,67 +7,67 @@ import SideBar from "./SideBar.vue";
   <div class="container">
     <div class="Rooms">
       <div class="room">
-        <img src="/public/delivery-door-big.png" alt="door" />
+        <img src="/delivery-door-big.png" alt="door" />
         <h3>Room 1</h3>
       </div>
       <div class="room">
-        <img src="/public/delivery-door-big.png" alt="door" />
+        <img src="/delivery-door-big.png" alt="door" />
         <h3>Room 2</h3>
       </div>
       <div class="room">
-        <img src="/public/delivery-door-big.png" alt="door" />
+        <img src="/delivery-door-big.png" alt="door" />
         <h3>Room 3</h3>
       </div>
       <div class="room">
-        <img src="/public/delivery-door-big.png" alt="door" />
+        <img src="/delivery-door-big.png" alt="door" />
         <h3>Room 4</h3>
       </div>
       <div class="room">
-        <img src="/public/delivery-door-big.png" alt="door" />
+        <img src="/delivery-door-big.png" alt="door" />
         <h3>Room 5</h3>
       </div>
       <div class="room">
-        <img src="/public/delivery-door-big.png" alt="door" />
+        <img src="/delivery-door-big.png" alt="door" />
         <h3>Room 6</h3>
       </div>
       <div class="room">
-        <img src="/public/delivery-door-big.png" alt="door" />
+        <img src="/delivery-door-big.png" alt="door" />
         <h3>Room 7</h3>
       </div>
       <div class="room">
-        <img src="/public/delivery-door-big.png" alt="door" />
+        <img src="/delivery-door-big.png" alt="door" />
         <h3>Room 8</h3>
       </div>
       <div class="room">
-        <img src="/public/delivery-door-big.png" alt="door" />
+        <img src="/delivery-door-big.png" alt="door" />
         <h3>Room 9</h3>
       </div>
       <div class="room">
-        <img src="/public/delivery-door-big.png" alt="door" />
+        <img src="/delivery-door-big.png" alt="door" />
         <h3>Room 10</h3>
       </div>
       <div class="room">
-        <img src="/public/delivery-door-big.png" alt="door" />
+        <img src="/delivery-door-big.png" alt="door" />
         <h3>Room 11</h3>
       </div>
       <div class="room">
-        <img src="/public/delivery-door-big.png" alt="door" />
+        <img src="/delivery-door-big.png" alt="door" />
         <h3>Room 12</h3>
       </div>
       <div class="room">
-        <img src="/public/delivery-door-big.png" alt="door" />
+        <img src="/delivery-door-big.png" alt="door" />
         <h3>Room 13</h3>
       </div>
       <div class="room">
-        <img src="/public/delivery-door-big.png" alt="door" />
+        <img src="/delivery-door-big.png" alt="door" />
         <h3>Room 14</h3>
       </div>
       <div class="room">
-        <img src="/public/delivery-door-big.png" alt="door" />
+        <img src="/delivery-door-big.png" alt="door" />
         <h3>Room 15</h3>
       </div>
       <div class="room">
-        <img src="/public/delivery-door-big.png" alt="door" />
+        <img src="/delivery-door-big.png" alt="door" />
         <h3>Room 16</h3>
       </div>
     </div>

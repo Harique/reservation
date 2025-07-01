@@ -1,5 +1,54 @@
 <script setup lang="ts">
+import { Guest, PaymentType, Status } from "@/db/models/DbModels/GuestsSchema";
 import { useRouter } from "vue-router";
+import {
+  CalendarDate,
+  today,
+} from "@internationalized/date";
+import { getDateDifferenceInDays } from "@/lib/utils";
+
+let guests: Guest[];
+
+const loadGuests = async () => {
+  try {
+    guests = await window.electronAPI.getNames();
+    console.log(guests);
+  } catch (error) {
+    console.error("Error loading guests:", error);
+  }
+};
+
+async function addGuest() {
+  try {
+    const time = today("Africa/Algiers");
+    const check_in = new CalendarDate(time.year, time.month, time.day);
+    const check_out = new CalendarDate(time.year, time.month, time.day).add({
+      days: 20,
+    });
+    const nights = getDateDifferenceInDays(check_in, check_out);
+    const guest: Guest = {
+      name: "hakim",
+      room: "2_3",
+      status: Status.Cancelled,
+      paymentType: PaymentType.AirBnB,
+      check_in: check_in,
+      check_out: check_out,
+      nights: nights,
+      notes: "HI NOTES :D",
+    };
+    
+    window.electronAPI.addGuest(guest);
+  } catch (error) {
+    console.error("Error adding guests:", error);
+  }
+}
+async function findGuest(){
+  const filter: Partial<Guest> = {
+    status:Status.Cancelled
+  }
+  const guest = await  window.electronAPI.findGuests(filter)
+  console.log(guest)
+}
 
 const router = useRouter();
 function navigate(pageName: string, params?: Record<string, any>) {
@@ -37,13 +86,13 @@ function navigate(pageName: string, params?: Record<string, any>) {
               <img src="/down.png" alt="right-arrow" />
             </div>
 
-            <div class="tab" @click="navigate('Logs')">
+            <button type="button" class="tab" @click="findGuest()">
               <div class="left">
                 <img src="/book-open.png" alt="" />
                 <h1>Logs</h1>
               </div>
               <img src="/down.png" alt="right-arrow" />
-            </div>
+            </button>
           </div>
         </div>
       </div>

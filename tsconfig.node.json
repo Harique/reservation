@@ -8,5 +8,14 @@
     "strict": true,
     "types": ["node"]
   },
-  "include": ["vite.config.ts", "vite.*.config.mjs", "src/main.ts", "src/preload.ts", "src/env.d.ts"]
-} 
+  "include": [
+    "vite.config.ts",
+    "src/models/**/*",
+    "vite.*.config.mjs",
+    "src/main.ts",
+    "src/preload.ts",
+    "src/env.d.ts",
+    "src/lib/services.ts",
+    "src/db/**/*"
+  ]
+}
