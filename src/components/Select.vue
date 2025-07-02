@@ -8,23 +8,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-defineProps<{ values: string[] }>();
+defineProps<{ values: string[],title:string }>();
 </script>
 
 <template>
   <Select>
     <SelectTrigger class="status-select">
-      <SelectValue placeholder="Status" />
+      <SelectValue :placeholder="title" />
     </SelectTrigger>
     <SelectContent>
       <SelectGroup>
-        <SelectLabel>Status</SelectLabel>
+        <SelectLabel>{{title}}</SelectLabel>
         <SelectItem
           v-for="(value, index) in values"
           :key="index"
           :value="value"
         >
-          Active
+          {{ value }}
         </SelectItem>
       </SelectGroup>
     </SelectContent>

@@ -7,6 +7,7 @@ import { CalendarDate, today } from "@internationalized/date";
 import { convertIntoDate, getDateDifferenceInDays } from "@/lib/utils";
 import { Guest, Status} from "@/db/models/DbModels/GuestsSchema";
 import Dialog from "./Dialog.vue";
+
 async function addGuest(guestInfo:Guest) {
   try {
     const time = today("Africa/Algiers");
@@ -31,13 +32,15 @@ async function addGuest(guestInfo:Guest) {
   } catch (error) {
     console.error("Error adding guests:", error);
   }
+  
 }
+
 </script>
 
 <template>
   <div class="header-buttons">
     <div class="filter-buttons">
-      <Select id="status" :values=[Status.Active,Status.Reserved,Status.Finished,Status.Cancelled]></Select>
+      <Select id="status" title="Status" :values=Object.values(Status)></Select>
       <Input class="filter-input" placeholder="Name" id="name" />
       <Input class="filter-input" placeholder="Nights" id="nights" />
       <Input class="filter-input" placeholder="Room" id="room" />
@@ -104,7 +107,7 @@ async function addGuest(guestInfo:Guest) {
   flex-wrap: wrap;
   justify-content: flex-start;
   gap: 15px;
-  max-width: 780px;
+  max-width: 790px;
 }
 .filter-input {
   height: 38px !important;

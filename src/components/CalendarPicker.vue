@@ -15,7 +15,10 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { RangeCalendar } from "@/components/ui/range-calendar";
-
+import { watch } from 'vue'
+const emit = defineEmits<{
+  'update:dateRange': [value: DateRange]
+}>()
 const df = new DateFormatter("en-US", {
   dateStyle: "medium",
 });
@@ -24,6 +27,10 @@ const value = ref({
   start: new CalendarDate(time.year, time.month, time.day),
   end: new CalendarDate(time.year, time.month, time.day).add({ days: 20 }),
 }) as Ref<DateRange>;
+
+watch(value, (newValue) => {
+  emit('update:dateRange', newValue)
+}, { deep: true })
 </script>
 
 <template>
@@ -50,6 +57,7 @@ const value = ref({
     </PopoverTrigger>
     <PopoverContent class="w-auto p-0">
       <RangeCalendar
+      
         v-model="value"
         initial-focus
         :number-of-months="2"
