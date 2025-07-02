@@ -12,11 +12,11 @@ db.exec(`CREATE TABLE IF NOT EXISTS Guests (
   id INTEGER PRIMARY KEY,
   name TEXT NOT NULL,
   room TEXT NOT NULL,
-  status TEXT NOT NULL CHECK (status IN ('active', 'reserved', 'finished', 'cancelled')),
+  status TEXT NOT NULL CHECK (status IN ('Active', 'Reserved', 'Finished', 'Cancelled')),
   nights INTEGER NOT NULL,
   check_in TEXT NOT NULL,   -- Store CalendarDate as ISO string
   check_out TEXT NOT NULL,  -- Store CalendarDate as ISO string
-  paymentType TEXT NOT NULL CHECK (paymentType IN ('airbnb', 'booking', 'other')),
+  paymentType TEXT NOT NULL CHECK (paymentType IN ('Airbnb', 'Booking', 'Other')),
   notes TEXT
 );`);
 

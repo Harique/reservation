@@ -1,53 +1,44 @@
 <script setup lang="ts">
 import { Guest, PaymentType, Status } from "@/db/models/DbModels/GuestsSchema";
 import { useRouter } from "vue-router";
-import {
-  CalendarDate,
-  today,
-} from "@internationalized/date";
-import { getDateDifferenceInDays } from "@/lib/utils";
+import { CalendarDate, today } from "@internationalized/date";
+import { convertIntoDate, getDateDifferenceInDays } from "@/lib/utils";
 
-let guests: Guest[];
-
-const loadGuests = async () => {
+async function findGuest() {
+  const filter: Partial<Guest> = {
+    status: Status.Cancelled,
+  };
+  const guest = await window.electronAPI.findGuests(filter);
+  console.log(guest);
+}
+async function removeGuest() {
   try {
-    guests = await window.electronAPI.getNames();
-    console.log(guests);
+    const remove = window.electronAPI.removeGuest(1);
+    console.log(remove);
   } catch (error) {
-    console.error("Error loading guests:", error);
-  }
-};
-
-async function addGuest() {
-  try {
-    const time = today("Africa/Algiers");
-    const check_in = new CalendarDate(time.year, time.month, time.day);
-    const check_out = new CalendarDate(time.year, time.month, time.day).add({
-      days: 20,
-    });
-    const nights = getDateDifferenceInDays(check_in, check_out);
-    const guest: Guest = {
-      name: "hakim",
-      room: "2_3",
-      status: Status.Cancelled,
-      paymentType: PaymentType.AirBnB,
-      check_in: check_in,
-      check_out: check_out,
-      nights: nights,
-      notes: "HI NOTES :D",
-    };
-    
-    window.electronAPI.addGuest(guest);
-  } catch (error) {
-    console.error("Error adding guests:", error);
+    console.error("Error removing guests:", error);
   }
 }
-async function findGuest(){
-  const filter: Partial<Guest> = {
-    status:Status.Cancelled
-  }
-  const guest = await  window.electronAPI.findGuests(filter)
-  console.log(guest)
+async function updateGuest() {
+  const time = today("Africa/Algiers");
+  const check_in = new CalendarDate(time.year, time.month, time.day);
+  const check_out = new CalendarDate(time.year, time.month, time.day).add({
+    days: 20,
+  });
+  const dates = convertIntoDate(check_in, check_out);
+  const nights = getDateDifferenceInDays(check_in, check_out);
+  const updatedGuest: Guest = {
+    id:1,
+    name: "KARIM",
+    room: "2_3",
+    status: Status.Cancelled,
+    paymentType: PaymentType.AirBnB,
+    check_in: dates.checkInDate,
+    check_out: dates.checkOutDate,
+    nights: nights,
+    notes: "HI NOTES :D",
+  };
+  window.electronAPI.updateGuest(updatedGuest)
 }
 
 const router = useRouter();
@@ -86,7 +77,7 @@ function navigate(pageName: string, params?: Record<string, any>) {
               <img src="/down.png" alt="right-arrow" />
             </div>
 
-            <button type="button" class="tab" @click="findGuest()">
+            <button type="button" class="tab" @click="navigate('Logs')">
               <div class="left">
                 <img src="/book-open.png" alt="" />
                 <h1>Logs</h1>
@@ -116,7 +107,7 @@ function navigate(pageName: string, params?: Record<string, any>) {
   min-width: 290px;
   position: sticky;
   top: 0;
-
+  
   background-color: #131313;
   padding-top: 40px;
   padding-bottom: 40px;

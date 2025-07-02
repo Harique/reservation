@@ -8,6 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+defineProps<{ values: string[] }>();
 </script>
 
 <template>
@@ -18,14 +19,19 @@ import {
     <SelectContent>
       <SelectGroup>
         <SelectLabel>Status</SelectLabel>
-        <SelectItem value="Active"> Active </SelectItem>
-        <SelectItem value="Reserved"> Reserved </SelectItem>
+        <SelectItem
+          v-for="(value, index) in values"
+          :key="index"
+          :value="value"
+        >
+          Active
+        </SelectItem>
       </SelectGroup>
     </SelectContent>
   </Select>
 </template>
 
-<style>
+<style scoped>
 .status-select {
   font-weight: 600;
   font-size: 14px;

@@ -27,7 +27,7 @@ const value = ref({
 </script>
 
 <template>
-  <Popover class="">
+  <Popover>
     <PopoverTrigger as-child>
       <Button
         variant="outline"

@@ -1,33 +1,15 @@
 import { app, BrowserWindow, ipcMain } from "electron";
 import path from "node:path";
-import { getAllGuests,addGuest,findGuests } from "./lib/services";
+import {
+  getAllGuests,
+  addGuest,
+  findGuests,
+  removeGuest,
+  updateGuest,
+  getFinishedGuests,
+  getActiveGuests,
+} from "./lib/services";
 import { Guest } from "./db/models/DbModels/GuestsSchema";
-import { findAncestor } from "typescript";
-
-ipcMain.handle("db:getAll", async () => {
-  try {
-    return getAllGuests();
-  } catch (error) {
-    console.error("Database error:", error);
-    throw error;
-  }
-});
-ipcMain.handle("db:addGuest", async (_event, guest:Guest) => {
-  try {
-    return addGuest(guest);
-  } catch (error) {
-    console.error("Database error:", error);
-    throw error;
-  }
-});
-ipcMain.handle("db:findGuests", async (_event, guestFilter:Partial<Guest>) => {
-  try {
-    return findGuests(guestFilter);
-  } catch (error) {
-    console.error("Database error:", error);
-    throw error;
-  }
-});
 
 const createWindow = (): void => {
   const mainWindow = new BrowserWindow({
@@ -62,5 +44,49 @@ app.whenReady().then(() => {
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
     app.quit();
+  }
+});
+
+ipcMain.handle("db:getGuests", async (_event, type: string) => {
+  try {
+    if (type == "active") {
+      return getActiveGuests();
+    }
+    return getFinishedGuests();
+  } catch (error) {
+    console.error("Database error:", error);
+    throw error;
+  }
+});
+ipcMain.handle("db:addGuest", async (_event, guest: Guest) => {
+  try {
+    return addGuest(guest);
+  } catch (error) {
+    console.error("Database error:", error);
+    throw error;
+  }
+});
+ipcMain.handle("db:findGuests", async (_event, guestFilter: Partial<Guest>) => {
+  try {
+    return findGuests(guestFilter);
+  } catch (error) {
+    console.error("Database error:", error);
+    throw error;
+  }
+});
+ipcMain.handle("db:removeGuest", async (_event, id: number) => {
+  try {
+    return removeGuest(id);
+  } catch (error) {
+    console.error("Database error:", error);
+    throw error;
+  }
+});
+ipcMain.handle("db:updateGuest", async (_event, guest: Guest) => {
+  try {
+    return updateGuest(guest);
+  } catch (error) {
+    console.error("Database error:", error);
+    throw error;
   }
 });
