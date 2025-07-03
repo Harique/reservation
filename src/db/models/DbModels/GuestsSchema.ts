@@ -10,9 +10,9 @@ enum Status {
   Cancelled = "Cancelled",
 }
 interface Date {
-  year: number;
-  month: number;
-  day: number;
+  year: number ;
+  month: number ;
+  day: number ;
 }
 
 interface Guest {
@@ -21,10 +21,21 @@ interface Guest {
   room: string;
   status: Status;
   nights: number;
-  check_in: Date;
-  check_out: Date;
+  check_in: Date | undefined;
+  check_out: Date | undefined;
   paymentType: PaymentType;
   notes: string;
+}
+interface GuestFilter {
+  id?: number;
+  name?: string;
+  room?: string;
+  status?: Status;
+  nights?: number;
+  check_in?: Date;
+  check_out?: Date ;
+  paymentType?: PaymentType;
+  notes?: string;
 }
 interface GuestRetrieve {
   id?: number;
@@ -39,4 +50,4 @@ interface GuestRetrieve {
 }
 
 
-export { Guest, Status, PaymentType, Date,GuestRetrieve };
+export { Guest, Status, PaymentType, Date,GuestRetrieve,GuestFilter };

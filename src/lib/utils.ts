@@ -20,16 +20,17 @@ export function getDateDifferenceInDays(
   return Math.floor(diffTime / (1000 * 60 * 60 * 24));
 }
 
-export function convertIntoDate(checkIn: CalendarDate, checkOut: CalendarDate) {
+export function convertIntoDate(checkIn: CalendarDate, checkOut: CalendarDate ) {
+  
   const checkInDate: Date = {
     year: checkIn.year,
     month: checkIn.month,
     day: checkIn.day,
   };
-  const checkOutDate: Date = {
-    year: checkOut.year,
-    month: checkOut.month,
-    day: checkOut.day,
+  const checkOutDate:Date  = {
+    year: checkOut?.year,
+    month: checkOut?.month,
+    day: checkOut?.day,
   };
   return { checkInDate, checkOutDate };
 }

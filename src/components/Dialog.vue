@@ -14,19 +14,33 @@ import { Label } from "@/components/ui/label";
 import Select from "./Select.vue";
 import CalendarPicker from "./CalendarPicker.vue";
 import { Guest, PaymentType, Status } from "@/db/models/DbModels/GuestsSchema";
-import { reactive, ref } from "vue";
+import { computed, reactive, ref, toRaw } from "vue";
 import { convertIntoDate, getDateDifferenceInDays } from "@/lib/utils";
 import { CalendarDate, today } from "@internationalized/date";
 import { DateRange } from "reka-ui";
+import Textarea from "./ui/textarea/Textarea.vue";
 
-const time = today("Africa/Algiers");
-let dateRange = reactive<DateRange>({
-  start: new CalendarDate(time.year, time.month, time.day),
-  end: new CalendarDate(time.year, time.month, time.day).add({ days: 20 }),
+
+
+async function addGuest(guestInfo: Guest) {
+  try {
+    window.electronAPI.addGuest(guestInfo);
+  } catch (error) {
+    console.error("Error adding guests:", error);
+  }
+}
+const guest = reactive<Guest>({
+  name: "",
+  room: "",
+  check_in: undefined,
+  check_out: undefined,
+  nights: 0,
+  status: Status.Reserved,
+  paymentType: PaymentType.Other,
+  notes: "", 
 });
 
-function handleDateRangeChange(daterange: DateRange) {
-  dateRange = daterange;
+function handleDateRangeChange(dateRange: DateRange) {
 
   const dates = convertIntoDate(
     dateRange.start as CalendarDate,
@@ -35,30 +49,37 @@ function handleDateRangeChange(daterange: DateRange) {
 
   guest.check_in = dates.checkInDate;
   guest.check_out = dates.checkOutDate;
-  guest.nights = getDateDifferenceInDays(
-    dateRange.start as CalendarDate,
-    dateRange.end as CalendarDate
-  );
+  if (dateRange.end) {
+    guest.nights = getDateDifferenceInDays(
+      dateRange.start as CalendarDate,
+      dateRange.end as CalendarDate
+    );
+  }
 }
 
-const dates = convertIntoDate(
-  dateRange.start as CalendarDate,
-  dateRange.end as CalendarDate
-); // used to initialize the check in and out props
-const formData = reactive({
-  description: "",
-  // other form fields...
+
+const isFormValid = computed(() => {
+  return (
+    guest.name.trim() !== "" &&
+    guest.room.trim() !== "" &&
+    guest.status !== null &&
+    guest.nights !== 0 &&
+    guest.paymentType !== null &&
+    guest.check_in !== undefined &&
+    guest.check_out !== undefined &&
+    guest.notes.trim() !== ""
+  );
 });
-const guest = reactive<Guest>({
-  name: "",
-  room: "",
-  check_in: dates.checkInDate,
-  check_out: dates.checkOutDate,
-  nights: 0,
-  status: Status.Reserved,
-  paymentType: PaymentType.Other,
-  notes: formData.description, //TODO: fix notes not being set
-});
+const handleSubmit = () => {
+  if (isFormValid.value === true) {
+    console.log("Form is valid, submitting:", guest);
+    const plainGuest = toRaw(guest);
+    addGuest(plainGuest);
+
+  } else {
+    alert("Please fill in all required fields");
+  }
+};
 </script>
 
 <template>
@@ -109,7 +130,7 @@ const guest = reactive<Guest>({
         <div class="flex flex-col w-full gap-2">
           <Label for="notes">Notes</Label>
           <Textarea
-            v-model="formData.description"
+            v-model="guest.notes"
             id="notes"
             placeholder="Type your notes here."
           />
@@ -122,7 +143,7 @@ const guest = reactive<Guest>({
         ></Select>
       </div>
       <DialogFooter>
-        <Button type="submit" @click="console.log(guest)">
+        <Button type="submit" @click="handleSubmit" :disabled="!isFormValid">
           Save changes
         </Button>
       </DialogFooter>

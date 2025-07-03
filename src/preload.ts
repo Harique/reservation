@@ -15,7 +15,7 @@ declare global {
     electronAPI: {
       getGuests:(type:string)=> Promise<Guest[]>;
       addGuest: (guest: Guest) => void;
-      findGuests: (guestFilter: Partial<Guest>) => void;
+      findGuests: (guestFilter: Partial<Guest>) => Guest[];
       removeGuest: (id: number) => number;
       updateGuest: (guest: Guest) => void;
     };

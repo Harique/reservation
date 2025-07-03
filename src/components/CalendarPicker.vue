@@ -22,10 +22,9 @@ const emit = defineEmits<{
 const df = new DateFormatter("en-US", {
   dateStyle: "medium",
 });
-const time = today("Africa/Algiers");
 const value = ref({
-  start: new CalendarDate(time.year, time.month, time.day),
-  end: new CalendarDate(time.year, time.month, time.day).add({ days: 20 }),
+  start: undefined,
+  end: undefined,
 }) as Ref<DateRange>;
 
 watch(value, (newValue) => {
@@ -57,7 +56,7 @@ watch(value, (newValue) => {
     </PopoverTrigger>
     <PopoverContent class="w-auto p-0">
       <RangeCalendar
-      
+        :default-value="{ start: undefined, end: undefined }"
         v-model="value"
         initial-focus
         :number-of-months="2"

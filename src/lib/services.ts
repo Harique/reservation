@@ -1,6 +1,6 @@
 import Database from "better-sqlite3";
 import { database } from "../db/models/dbmanager";
-import { Guest, GuestRetrieve, Date } from "../db/models/DbModels/GuestsSchema";
+import { Guest, GuestRetrieve, Date, GuestFilter } from "../db/models/DbModels/GuestsSchema";
 
 function getAllGuests() {
   let stmt: Database.Statement<[], Guest> = database.prepare(
@@ -77,7 +77,7 @@ function addGuest(guest: Guest) {
   );
 }
 
-function findGuests(filter: Partial<Guest>): Guest[] {
+function findGuests(filter: Partial<GuestFilter>): Guest[] {
   let sql = "SELECT * FROM Guests";
   const conditions: string[] = [];
   const values: (string | number)[] = [];
@@ -85,6 +85,10 @@ function findGuests(filter: Partial<Guest>): Guest[] {
   if (filter.status) {
     conditions.push("status = ?");
     values.push(filter.status);
+  }
+  if (filter.name) {
+    conditions.push("name = ?");
+    values.push(filter.name);
   }
 
   if (filter.room) {
@@ -104,12 +108,12 @@ function findGuests(filter: Partial<Guest>): Guest[] {
 
   if (filter.check_in) {
     conditions.push("check_in >= ?");
-    values.push(filter.check_in.toString()); // CalendarDate to string
+    values.push(JSON.stringify(filter.check_in)); // CalendarDate to string
   }
 
   if (filter.check_out) {
     conditions.push("check_out <= ?");
-    values.push(filter.check_out.toString());
+    values.push(JSON.stringify(filter.check_out));
   }
 
   if (conditions.length > 0) {
@@ -118,6 +122,7 @@ function findGuests(filter: Partial<Guest>): Guest[] {
 
   const stmt: Database.Statement<(string | number)[], Guest> =
     database.prepare(sql);
+  
   return stmt.all(...values);
 }
 
