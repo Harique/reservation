@@ -11,7 +11,7 @@ let guests = ref<Guest[]>([]);
 <template>
   <div class="container">
     <FilterBar :render-create-new=true type="active" v-model:filtered-guests="guests"></FilterBar>
-    <GuestList type-of-guests="active" :guests="guests"></GuestList>
+    <GuestList :guests="guests"></GuestList>
   </div>
 </template>
 

@@ -15,6 +15,12 @@ const routes = [
     path: '/Logs',
     name:'Logs',
     component: () => import("../components/LogsPage.vue")
+  },
+  {
+    path: '/RoomInfo/:roomName',
+    name:'Room Info',
+    component: () => import("../components/RoomInfo.vue"),
+    props: true
   }
 ]
 

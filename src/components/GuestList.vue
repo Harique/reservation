@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { Guest } from "@/db/models/DbModels/GuestsSchema";
 import GuestRow from "./GuestRow.vue";
-import { onMounted, ref } from "vue";
 const props = defineProps<{
-  typeOfGuests: string,
   guests:Guest[]
 }>();
 
@@ -20,7 +18,7 @@ const props = defineProps<{
     </div>
     <div class="guest-list">
       <GuestRow
-        v-for="(guest, index) in guests"
+        v-for="(guest, index) in props.guests"
         :key="index"
         :guest="guest"
       ></GuestRow>

@@ -1,16 +1,15 @@
 <script setup lang="ts">
-import SideBar from "./SideBar.vue";
 import FilterBar from "./FilterBar.vue";
 import GuestList from "./GuestList.vue";
 import { ref } from "vue";
 import { Guest } from "@/db/models/DbModels/GuestsSchema";
-
+const props = defineProps<{ roomName: string }>();
 let guests = ref<Guest[]>([]);
 </script>
 
 <template>
   <div class="container">
-    <FilterBar :render-create-new=false type="finished" v-model:filtered-guests="guests"></FilterBar>
+    <FilterBar :room-name="props.roomName" :render-create-new=true type="active" v-model:filtered-guests="guests"></FilterBar>
     <GuestList :guests="guests"></GuestList>
   </div>
 </template>

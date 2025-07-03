@@ -11,11 +11,16 @@ import {
 } from "@/db/models/DbModels/GuestsSchema";
 import Dialog from "./Dialog.vue";
 import { onMounted, reactive, ref, toRaw, watch } from "vue";
-import { convertIntoDate, filterGuests, getDateDifferenceInDays } from "@/lib/utils";
+import {
+  convertIntoDate,
+  filterGuests,
+  getDateDifferenceInDays,
+} from "@/lib/utils";
 import { CalendarDate } from "@internationalized/date";
 const props = defineProps<{
   renderCreateNew: boolean;
   type: string;
+  roomName?: string;
 }>();
 const emit = defineEmits<{
   "update:filteredGuests": [guests: Guest[]];
@@ -24,7 +29,7 @@ const emit = defineEmits<{
 let guests = ref<Guest[]>([]);
 
 const dateRange = ref({ start: undefined, end: undefined });
-const guestFilter:GuestFilter = reactive<GuestFilter>({
+const guestFilter: GuestFilter = reactive<GuestFilter>({
   name: undefined,
   room: undefined,
   check_in: undefined,
@@ -51,7 +56,7 @@ async function filterReset() {
 async function handleFilter() {
   try {
     const plainGuest = toRaw(guestFilter);
-    const guestList = await filterGuests(guests.value,plainGuest);
+    const guestList = await filterGuests(guests.value, plainGuest);
 
     emit("update:filteredGuests", guestList);
   } catch (error) {
@@ -62,8 +67,14 @@ watch(
   dateRange,
   (newVal) => {
     if (newVal.start && newVal.end) {
-      guestFilter.check_in = convertIntoDate(newVal.start, newVal.end).checkInDate;
-      guestFilter.check_out = convertIntoDate(newVal.start, newVal.end).checkOutDate;
+      guestFilter.check_in = convertIntoDate(
+        newVal.start,
+        newVal.end
+      ).checkInDate;
+      guestFilter.check_out = convertIntoDate(
+        newVal.start,
+        newVal.end
+      ).checkOutDate;
       guestFilter.nights = getDateDifferenceInDays(
         newVal.start as CalendarDate,
         newVal.end as CalendarDate
@@ -75,10 +86,13 @@ watch(
 );
 onMounted(async () => {
   try {
-    const fetchedGuests: Guest[] = await window.electronAPI.getGuests(
-      props.type
-    );
-    guests.value = fetchedGuests
+    let fetchedGuests: Guest[] = await window.electronAPI.getGuests(props.type);
+    if (props.roomName) {
+      fetchedGuests = await fetchedGuests.filter(
+        (g) => g.room === props.roomName
+      );
+    }
+    guests.value = fetchedGuests;
     emit("update:filteredGuests", fetchedGuests);
   } catch (error) {
     console.log("error fetching guests", error);
@@ -108,6 +122,7 @@ onMounted(async () => {
         id="nights"
       />
       <Input
+        v-if="roomName == undefined"
         v-model="guestFilter.room"
         class="filter-input"
         placeholder="Room"
