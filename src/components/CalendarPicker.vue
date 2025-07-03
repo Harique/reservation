@@ -2,6 +2,8 @@
 import type { DateRange } from "reka-ui";
 import {
 
+  Calendar,
+  CalendarDate,
   DateFormatter,
   getLocalTimeZone,
 
@@ -18,6 +20,9 @@ import { RangeCalendar } from "@/components/ui/range-calendar";
 import { watch } from 'vue'
 const emit = defineEmits<{
   'update:dateRange': [value: DateRange]
+}>()
+const props = defineProps<{
+  initialDate?: DateRange
 }>()
 const df = new DateFormatter("en-US", {
   dateStyle: "medium",
@@ -56,7 +61,7 @@ watch(value, (newValue) => {
     </PopoverTrigger>
     <PopoverContent class="w-auto p-0">
       <RangeCalendar
-        :default-value="{ start: undefined, end: undefined }"
+        :default-value="{ start: props.initialDate?.start, end: props.initialDate?.end }"
         v-model="value"
         initial-focus
         :number-of-months="2"

@@ -2,6 +2,7 @@
 import { formatDate } from "@/lib/utils";
 import Status from "./ui/status/Status.vue";
 import { Guest } from "@/db/models/DbModels/GuestsSchema";
+import DialogEdit from "./DialogEdit.vue";
 const props = defineProps<{ guest: Guest }>();
 
 const dateIn = formatDate(props.guest.check_in!);
@@ -13,11 +14,12 @@ const dateOut = formatDate(props.guest.check_out!);
     <div class="status">
       <Status  :variant="`${props.guest.status}`"></Status>
     </div>
-    <div >{{ props.guest.name }}</div>
+    <div>{{ props.guest.name }}</div>
     <div>{{ props.guest.room }}</div>
     <div>{{ dateIn }}</div>
     <div>{{ dateOut }}</div>
     <div>{{ props.guest.nights }}</div>
+    <DialogEdit :guest="props.guest"></DialogEdit>
   </div>
 </template>
 <style scoped>

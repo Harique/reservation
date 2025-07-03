@@ -2,9 +2,8 @@
 import { Guest } from "@/db/models/DbModels/GuestsSchema";
 import GuestRow from "./GuestRow.vue";
 const props = defineProps<{
-  guests:Guest[]
+  guests: Guest[];
 }>();
-
 </script>
 <template>
   <div class="guest-container">
@@ -15,6 +14,7 @@ const props = defineProps<{
       <p>Check-in</p>
       <p>Check-in</p>
       <p>Nights</p>
+      <div id="options">Options</div>
     </div>
     <div class="guest-list">
       <GuestRow
@@ -32,6 +32,10 @@ const props = defineProps<{
   flex-direction: column;
   width: 100%;
   gap: 25px;
+}
+#options {
+  text-align: left;
+  border-bottom: 1px solid #eee;
 }
 .header-titles {
   display: flex;
