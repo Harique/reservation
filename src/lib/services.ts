@@ -1,6 +1,7 @@
 import Database from "better-sqlite3";
 import { database } from "../db/models/dbmanager";
 import { Guest, GuestRetrieve, Date, GuestFilter } from "../db/models/DbModels/GuestsSchema";
+import { fileURLToPath } from "node:url";
 
 function getAllGuests() {
   let stmt: Database.Statement<[], Guest> = database.prepare(
@@ -119,7 +120,6 @@ function findGuests(filter: Partial<GuestFilter>): Guest[] {
   if (conditions.length > 0) {
     sql += " WHERE " + conditions.join(" AND ");
   }
-
   const stmt: Database.Statement<(string | number)[], Guest> =
     database.prepare(sql);
   

@@ -1,15 +1,13 @@
 <script setup lang="ts">
 import type { DateRange } from "reka-ui";
 import {
-
   Calendar,
   CalendarDate,
   DateFormatter,
   getLocalTimeZone,
-
 } from "@internationalized/date";
 
-import { type Ref, ref } from "vue";
+import { type Ref, ref, onMounted, watchEffect } from "vue";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -17,24 +15,43 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { RangeCalendar } from "@/components/ui/range-calendar";
-import { watch } from 'vue'
+import { watch } from "vue";
+
 const emit = defineEmits<{
-  'update:dateRange': [value: DateRange]
-}>()
+  "update:dateRange": [value: DateRange];
+}>();
+
 const props = defineProps<{
-  initialDate?: DateRange
-}>()
+  initialDate?: DateRange;
+}>();
+
 const df = new DateFormatter("en-US", {
   dateStyle: "medium",
 });
+
+// Initialize value with initialDate if provided
 const value = ref({
-  start: undefined,
-  end: undefined,
+  start: props.initialDate?.start,
+  end: props.initialDate?.end,
 }) as Ref<DateRange>;
 
-watch(value, (newValue) => {
-  emit('update:dateRange', newValue)
-}, { deep: true })
+// Watch for changes in initialDate prop and update value accordingly
+watchEffect(() => {
+  if (props.initialDate) {
+    value.value = {
+      start: props.initialDate.start,
+      end: props.initialDate.end,
+    };
+  }
+});
+
+watch(
+  value,
+  (newValue) => {
+    emit("update:dateRange", newValue);
+  },
+  { deep: true }
+);
 </script>
 
 <template>
@@ -61,7 +78,7 @@ watch(value, (newValue) => {
     </PopoverTrigger>
     <PopoverContent class="w-auto p-0">
       <RangeCalendar
-        :default-value="{ start: props.initialDate?.start, end: props.initialDate?.end }"
+        :default-value="{ start: value.start, end: value.end }"
         v-model="value"
         initial-focus
         :number-of-months="2"

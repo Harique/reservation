@@ -20,14 +20,13 @@ export function getDateDifferenceInDays(
   return Math.floor(diffTime / (1000 * 60 * 60 * 24));
 }
 
-export function convertIntoDate(checkIn: CalendarDate, checkOut: CalendarDate ) {
-  
+export function convertIntoDate(checkIn: CalendarDate, checkOut: CalendarDate) {
   const checkInDate: Date = {
     year: checkIn.year,
     month: checkIn.month,
     day: checkIn.day,
   };
-  const checkOutDate:Date  = {
+  const checkOutDate: Date = {
     year: checkOut?.year,
     month: checkOut?.month,
     day: checkOut?.day,
@@ -38,13 +37,16 @@ export function formatDate(date: Date) {
   const newDate = `${date.year}/${date.month}/${date.day}`;
   return newDate;
 }
-export function filterGuests(guests: Guest[], filter: Partial<GuestFilter>): Guest[] {
+export function filterGuests(
+  guests: Guest[],
+  filter: Partial<GuestFilter>
+): Guest[] {
   return guests.filter((guest) => {
     return Object.entries(filter).every(([key, value]) => {
       if (value === undefined || value === null) return true;
 
-      if (key === 'check_in' || key === 'check_out') {
-        const guestDate = guest[key as 'check_in' | 'check_out'];
+      if (key === "check_in" || key === "check_out") {
+        const guestDate = guest[key as "check_in" | "check_out"];
         const filterDate = value as Date;
 
         return (
@@ -53,10 +55,11 @@ export function filterGuests(guests: Guest[], filter: Partial<GuestFilter>): Gue
           guestDate?.day === filterDate.day
         );
       }
-
+      if (key === "nights") {
+        const filterNights = Number(value);
+        return guest.nights === filterNights;
+      }
       return guest[key as keyof Guest] === value;
     });
   });
 }
-
-

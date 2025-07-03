@@ -14,30 +14,29 @@ import { Label } from "@/components/ui/label";
 import Select from "./Select.vue";
 import CalendarPicker from "./CalendarPicker.vue";
 import {
-  Date,
   Guest,
   PaymentType,
   Status,
 } from "@/db/models/DbModels/GuestsSchema";
-import { computed, onMounted, reactive, ref, toRaw, watch } from "vue";
+import { computed, reactive, ref, toRaw, watch } from "vue";
 import { convertIntoDate, getDateDifferenceInDays } from "@/lib/utils";
-import { CalendarDate, today } from "@internationalized/date";
+import { CalendarDate } from "@internationalized/date";
 import Textarea from "./ui/textarea/Textarea.vue";
-import { DateRange } from "reka-ui";
+
+// Define DateRange type since it's not exported from @internationalized/date
+type DateRange = {
+  start: CalendarDate;
+  end: CalendarDate;
+};
+
 const props = defineProps<{
   guest: Guest;
 }>();
 
-const dateRange = ref<DateRange>({
-  start: new CalendarDate(1970, 1, 1), // or use today(getLocalTimeZone())
-  end: new CalendarDate(1970, 1, 1),
-});
-
-const initialDate = computed(() => dateRange.value);
-
-onMounted(() => {
+// Initialize with guest's existing dates or default dates
+const getInitialDateRange = (): DateRange => {
   if (props.guest.check_in && props.guest.check_out) {
-    dateRange.value = {
+    return {
       start: new CalendarDate(
         props.guest.check_in.year,
         props.guest.check_in.month,
@@ -50,7 +49,16 @@ onMounted(() => {
       ),
     };
   }
-});
+  return {
+    start: new CalendarDate(1970, 1, 1),
+    end: new CalendarDate(1970, 1, 1),
+  };
+};
+
+const dateRange = ref<DateRange>(getInitialDateRange());
+
+// Pass the initial date range directly (not as a computed)
+const initialDate = getInitialDateRange();
 
 async function updateGuest(guestInfo: Guest) {
   try {
@@ -59,6 +67,7 @@ async function updateGuest(guestInfo: Guest) {
     console.error("Error updating guests:", error);
   }
 }
+
 const updatedGuest = reactive<Guest>({
   name: props.guest.name,
   room: props.guest.room,
@@ -82,29 +91,34 @@ const isFormValid = computed(() => {
     updatedGuest.notes.trim() !== ""
   );
 });
+
 const handleSubmit = () => {
   if (isFormValid.value === true) {
     const plainGuest = toRaw(updatedGuest);
+    console.log(plainGuest);
     updateGuest(plainGuest);
   } else {
     alert("Please fill in all required fields");
   }
 };
+
+// Watch for changes in the calendar and update the guest data
 watch(
   dateRange,
   (newVal) => {
-   if (newVal.start && newVal.end) {
-    const calendarDateStart = new CalendarDate(
-      newVal.start.year,
-      newVal.start.month,
-      newVal.start.day
-    );
+    if (newVal.start && newVal.end) {
+      const calendarDateStart = new CalendarDate(
+        newVal.start.year,
+        newVal.start.month,
+        newVal.start.day
+      );
 
-    const calendarDateEnd = new CalendarDate(
-      newVal.end.year,
-      newVal.end.month,
-      newVal.end.day
-    );
+      const calendarDateEnd = new CalendarDate(
+        newVal.end.year,
+        newVal.end.month,
+        newVal.end.day
+      );
+
       updatedGuest.check_in = convertIntoDate(
         calendarDateStart,
         calendarDateEnd
@@ -119,7 +133,6 @@ watch(
       );
     }
   },
-
   { deep: true }
 );
 </script>
@@ -143,7 +156,10 @@ watch(
             v-model="updatedGuest.status"
           ></Select>
           <div class="items-center gap-4">
-            <CalendarPicker v-model:dateRange="dateRange" :initial-date="initialDate"></CalendarPicker>
+            <CalendarPicker
+              v-model:dateRange="dateRange"
+              :initial-date="initialDate"
+            />
           </div>
         </div>
 
@@ -190,6 +206,7 @@ watch(
     </DialogContent>
   </Dialog>
 </template>
+
 <style scoped>
 #notes {
   border: 1px solid;

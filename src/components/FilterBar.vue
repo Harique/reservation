@@ -56,8 +56,9 @@ async function filterReset() {
 async function handleFilter() {
   try {
     const plainGuest = toRaw(guestFilter);
+    Number(plainGuest.nights)
+    console.log(plainGuest)
     const guestList = await filterGuests(guests.value, plainGuest);
-
     emit("update:filteredGuests", guestList);
   } catch (error) {
     console.log(error);
