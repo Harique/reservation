@@ -9,12 +9,10 @@ async function findGuest() {
     status: Status.Cancelled,
   };
   const guest = await window.electronAPI.findGuests(filter);
-  console.log(guest);
 }
 async function removeGuest() {
   try {
     const remove = window.electronAPI.removeGuest(1);
-    console.log(remove);
   } catch (error) {
     console.error("Error removing guests:", error);
   }

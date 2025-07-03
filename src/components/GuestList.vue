@@ -2,24 +2,11 @@
 import { Guest } from "@/db/models/DbModels/GuestsSchema";
 import GuestRow from "./GuestRow.vue";
 import { onMounted, ref } from "vue";
-const guests = ref<Guest[]>([]);
+const props = defineProps<{
+  typeOfGuests: string,
+  guests:Guest[]
+}>();
 
-async function loadGuests() {
-  try {
-    const guests = await window.electronAPI.getGuests("active");
-    return guests;
-  } catch (error) {
-    console.error("Error loading guests:", error);
-  }
-}
-onMounted(async () => {
-  try {
-    const fetchedGuests: Guest[] = await loadGuests().then();
-    guests.value = fetchedGuests;
-  } catch (error) {
-    console.log("error fetching guests", error);
-  }
-});
 </script>
 <template>
   <div class="guest-container">

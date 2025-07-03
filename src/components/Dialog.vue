@@ -14,9 +14,9 @@ import { Label } from "@/components/ui/label";
 import Select from "./Select.vue";
 import CalendarPicker from "./CalendarPicker.vue";
 import { Guest, PaymentType, Status } from "@/db/models/DbModels/GuestsSchema";
-import { computed, reactive, ref, toRaw } from "vue";
+import { computed, reactive, toRaw } from "vue";
 import { convertIntoDate, getDateDifferenceInDays } from "@/lib/utils";
-import { CalendarDate, today } from "@internationalized/date";
+import { CalendarDate } from "@internationalized/date";
 import { DateRange } from "reka-ui";
 import Textarea from "./ui/textarea/Textarea.vue";
 
@@ -57,7 +57,6 @@ function handleDateRangeChange(dateRange: DateRange) {
   }
 }
 
-
 const isFormValid = computed(() => {
   return (
     guest.name.trim() !== "" &&
@@ -72,7 +71,6 @@ const isFormValid = computed(() => {
 });
 const handleSubmit = () => {
   if (isFormValid.value === true) {
-    console.log("Form is valid, submitting:", guest);
     const plainGuest = toRaw(guest);
     addGuest(plainGuest);
 

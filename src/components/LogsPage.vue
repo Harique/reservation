@@ -6,11 +6,12 @@ import { ref } from "vue";
 import { Guest } from "@/db/models/DbModels/GuestsSchema";
 
 let guests = ref<Guest[]>([]);
+console.log(guests.value)
 </script>
 
 <template>
   <div class="container">
-    <FilterBar :render-create-new=true type="active" v-model:filtered-guests="guests"></FilterBar>
+    <FilterBar :render-create-new=false type="finished" v-model:filtered-guests="guests"></FilterBar>
     <GuestList type-of-guests="active" :guests="guests"></GuestList>
   </div>
 </template>

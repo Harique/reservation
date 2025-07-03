@@ -2,7 +2,7 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { Calendar, CalendarDate } from "@internationalized/date";
 import { toDate } from "reka-ui/date";
-import { Date } from "@/db/models/DbModels/GuestsSchema";
+import { Date, Guest, GuestFilter } from "@/db/models/DbModels/GuestsSchema";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -38,3 +38,25 @@ export function formatDate(date: Date) {
   const newDate = `${date.year}/${date.month}/${date.day}`;
   return newDate;
 }
+export function filterGuests(guests: Guest[], filter: Partial<GuestFilter>): Guest[] {
+  return guests.filter((guest) => {
+    return Object.entries(filter).every(([key, value]) => {
+      if (value === undefined || value === null) return true;
+
+      if (key === 'check_in' || key === 'check_out') {
+        const guestDate = guest[key as 'check_in' | 'check_out'];
+        const filterDate = value as Date;
+
+        return (
+          guestDate?.year === filterDate.year &&
+          guestDate?.month === filterDate.month &&
+          guestDate?.day === filterDate.day
+        );
+      }
+
+      return guest[key as keyof Guest] === value;
+    });
+  });
+}
+
+

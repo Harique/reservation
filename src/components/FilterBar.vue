@@ -4,18 +4,27 @@ import { Input } from "@/components/ui/input";
 import CalendarPicker from "./CalendarPicker.vue";
 import Button from "./ui/button/Button.vue";
 import {
-  Guest,
   Status,
   PaymentType,
   GuestFilter,
+  Guest,
 } from "@/db/models/DbModels/GuestsSchema";
 import Dialog from "./Dialog.vue";
-import { reactive, ref, toRaw, watch } from "vue";
-import { convertIntoDate, getDateDifferenceInDays } from "@/lib/utils";
+import { onMounted, reactive, ref, toRaw, watch } from "vue";
+import { convertIntoDate, filterGuests, getDateDifferenceInDays } from "@/lib/utils";
 import { CalendarDate } from "@internationalized/date";
-const dateRange = ref({ start: undefined, end: undefined });
+const props = defineProps<{
+  renderCreateNew: boolean;
+  type: string;
+}>();
+const emit = defineEmits<{
+  "update:filteredGuests": [guests: Guest[]];
+}>();
 
-const guest = reactive<GuestFilter>({
+let guests = ref<Guest[]>([]);
+
+const dateRange = ref({ start: undefined, end: undefined });
+const guestFilter:GuestFilter = reactive<GuestFilter>({
   name: undefined,
   room: undefined,
   check_in: undefined,
@@ -27,23 +36,24 @@ const guest = reactive<GuestFilter>({
 });
 
 async function filterReset() {
-  guest.name = undefined;
-  guest.status = undefined;
-  guest.room = undefined;
-  guest.nights = undefined;
-  guest.check_in = undefined;
-  guest.check_out = undefined;
-  guest.paymentType = undefined;
-  guest.notes = undefined;
+  guestFilter.name = undefined;
+  guestFilter.status = undefined;
+  guestFilter.room = undefined;
+  guestFilter.nights = undefined;
+  guestFilter.check_in = undefined;
+  guestFilter.check_out = undefined;
+  guestFilter.paymentType = undefined;
+  guestFilter.notes = undefined;
   dateRange.value.start = undefined;
   dateRange.value.end = undefined;
 }
 
 async function handleFilter() {
   try {
-    const plainGuest = toRaw(guest);
-    const guestList = await window.electronAPI.findGuests(plainGuest);
-    console.log(guestList);
+    const plainGuest = toRaw(guestFilter);
+    const guestList = await filterGuests(guests.value,plainGuest);
+
+    emit("update:filteredGuests", guestList);
   } catch (error) {
     console.log(error);
   }
@@ -52,9 +62,9 @@ watch(
   dateRange,
   (newVal) => {
     if (newVal.start && newVal.end) {
-      guest.check_in = convertIntoDate(newVal.start, newVal.end).checkInDate;
-      guest.check_out = convertIntoDate(newVal.start, newVal.end).checkOutDate;
-      guest.nights = getDateDifferenceInDays(
+      guestFilter.check_in = convertIntoDate(newVal.start, newVal.end).checkInDate;
+      guestFilter.check_out = convertIntoDate(newVal.start, newVal.end).checkOutDate;
+      guestFilter.nights = getDateDifferenceInDays(
         newVal.start as CalendarDate,
         newVal.end as CalendarDate
       );
@@ -63,6 +73,17 @@ watch(
 
   { deep: true }
 );
+onMounted(async () => {
+  try {
+    const fetchedGuests: Guest[] = await window.electronAPI.getGuests(
+      props.type
+    );
+    guests.value = fetchedGuests
+    emit("update:filteredGuests", fetchedGuests);
+  } catch (error) {
+    console.log("error fetching guests", error);
+  }
+});
 </script>
 
 <template>
@@ -70,24 +91,24 @@ watch(
     <div class="filter-buttons">
       <Select
         :values="Object.values(Status)"
-        v-model="guest.status"
+        v-model="guestFilter.status"
         id="status"
         title="Status"
       ></Select>
       <Input
-        v-model="guest.name"
+        v-model="guestFilter.name"
         class="filter-input"
         placeholder="Name"
         id="name"
       />
       <Input
-        v-model="guest.nights"
+        v-model="guestFilter.nights"
         class="filter-input"
         placeholder="Nights"
         id="nights"
       />
       <Input
-        v-model="guest.room"
+        v-model="guestFilter.room"
         class="filter-input"
         placeholder="Room"
         id="room"
@@ -100,12 +121,12 @@ watch(
         title="Payment Type"
         id="status"
         :values="Object.values(PaymentType)"
-        v-model="guest.paymentType"
+        v-model="guestFilter.paymentType"
       ></Select>
       <Button class="button" id="filter" @click="handleFilter"> Filter </Button>
       <Button class="button" id="clear" @click="filterReset"> Clear </Button>
     </div>
-    <div class="create-new">
+    <div v-if="props.renderCreateNew == true" class="create-new">
       <Dialog class="button"> Create New </Dialog>
     </div>
   </div>

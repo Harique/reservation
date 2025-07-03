@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import type { DateRange } from "reka-ui";
 import {
-  CalendarDate,
+
   DateFormatter,
   getLocalTimeZone,
-  today,
+
 } from "@internationalized/date";
 
 import { type Ref, ref } from "vue";

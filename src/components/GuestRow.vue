@@ -4,8 +4,8 @@ import Status from "./ui/status/Status.vue";
 import { Guest } from "@/db/models/DbModels/GuestsSchema";
 const props = defineProps<{ guest: Guest }>();
 
-const dateIn = formatDate(props.guest.check_in);
-const dateOut = formatDate(props.guest.check_out);
+const dateIn = formatDate(props.guest.check_in!);
+const dateOut = formatDate(props.guest.check_out!);
 </script>
 
 <template>
