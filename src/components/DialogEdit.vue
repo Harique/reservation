@@ -62,13 +62,30 @@ const initialDate = getInitialDateRange();
 
 async function updateGuest(guestInfo: Guest) {
   try {
-    window.electronAPI.updateGuest(guestInfo);
+    // Create a serializable version of the guest object
+    const serializableGuest = {
+      ...guestInfo,
+      // Ensure dates are plain objects, not complex Date/CalendarDate objects
+      check_in: guestInfo.check_in ? {
+        year: guestInfo.check_in.year,
+        month: guestInfo.check_in.month,
+        day: guestInfo.check_in.day
+      } : undefined,
+      check_out: guestInfo.check_out ? {
+        year: guestInfo.check_out.year,
+        month: guestInfo.check_out.month,
+        day: guestInfo.check_out.day
+      } : undefined,
+    };
+    
+    window.electronAPI.updateGuest(serializableGuest);
   } catch (error) {
     console.error("Error updating guests:", error);
   }
 }
 
 const updatedGuest = reactive<Guest>({
+  id:props.guest.id,
   name: props.guest.name,
   room: props.guest.room,
   check_in: props.guest.check_in,
@@ -95,7 +112,6 @@ const isFormValid = computed(() => {
 const handleSubmit = () => {
   if (isFormValid.value === true) {
     const plainGuest = toRaw(updatedGuest);
-    console.log(plainGuest);
     updateGuest(plainGuest);
   } else {
     alert("Please fill in all required fields");
@@ -144,8 +160,8 @@ watch(
     </DialogTrigger>
     <DialogContent class="sm:max-w-[425px]">
       <DialogHeader>
-        <DialogTitle>Add Guest</DialogTitle>
-        <DialogDescription> Add a guest to the list. </DialogDescription>
+        <DialogTitle>Edit Guest</DialogTitle>
+        <DialogDescription> Edit guest information. </DialogDescription>
       </DialogHeader>
       <div class="flex flex-col gap-4 py-4">
         <div class="flex flex-row justify-between">
@@ -193,7 +209,7 @@ watch(
         </div>
         <Select
           title="Payment Type"
-          id="status"
+          id="payment-type"
           :values="Object.values(PaymentType)"
           v-model="updatedGuest.paymentType"
         ></Select>
