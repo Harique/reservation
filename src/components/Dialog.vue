@@ -19,12 +19,21 @@ import { convertIntoDate, getDateDifferenceInDays } from "@/lib/utils";
 import { CalendarDate } from "@internationalized/date";
 import { DateRange } from "reka-ui";
 import Textarea from "./ui/textarea/Textarea.vue";
+import { useRoute } from "vue-router";
 
+const route = useRoute()
 
+const reloadWithHash = () => {
+  // Set the hash to current route
+  window.location.hash = route.fullPath
+  // Reload
+  window.location.reload()
+}
 
 async function addGuest(guestInfo: Guest) {
   try {
     window.electronAPI.addGuest(guestInfo);
+    reloadWithHash()
   } catch (error) {
     console.error("Error adding guests:", error);
   }

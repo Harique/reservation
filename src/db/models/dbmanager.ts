@@ -4,9 +4,7 @@ import path from "node:path";
 
 export type DatabaseType = Database.Database;
 
-const dbPath = path.join(__dirname, "../../sqlite");
-
-const db = new Database(dbPath);
+const db = new Database('sqlite');
 if (!db) throw error("DB IS NOT CONNECTED");
 db.exec(`CREATE TABLE IF NOT EXISTS Guests (
   id INTEGER PRIMARY KEY,

@@ -3,6 +3,7 @@ import { Guest, PaymentType, Status } from "@/db/models/DbModels/GuestsSchema";
 import { useRouter } from "vue-router";
 import { CalendarDate, today } from "@internationalized/date";
 import { convertIntoDate, getDateDifferenceInDays } from "@/lib/utils";
+import HoverComp from "./HoverComp.vue";
 
 async function findGuest() {
   const filter: Partial<Guest> = {
@@ -86,10 +87,9 @@ function navigate(pageName: string, params?: Record<string, any>) {
         </div>
       </div>
       <div class="help">
-        <div class="help-text">
-          <img src="/rescue.png" alt="Help" />
-          <h1>Help</h1>
-        </div>
+        <HoverComp class="help-text">
+          
+        </HoverComp>
       </div>
     </div>
   </div>

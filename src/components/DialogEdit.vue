@@ -22,6 +22,7 @@ import { computed, reactive, ref, toRaw, watch } from "vue";
 import { convertIntoDate, getDateDifferenceInDays } from "@/lib/utils";
 import { CalendarDate } from "@internationalized/date";
 import Textarea from "./ui/textarea/Textarea.vue";
+import { useRoute } from "vue-router";
 
 // Define DateRange type since it's not exported from @internationalized/date
 type DateRange = {
@@ -32,6 +33,15 @@ type DateRange = {
 const props = defineProps<{
   guest: Guest;
 }>();
+
+const route = useRoute()
+
+const reloadWithHash = () => {
+  // Set the hash to current route
+  window.location.hash = route.fullPath
+  // Reload
+  window.location.reload()
+}
 
 // Initialize with guest's existing dates or default dates
 const getInitialDateRange = (): DateRange => {
@@ -79,6 +89,7 @@ async function updateGuest(guestInfo: Guest) {
     };
     
     window.electronAPI.updateGuest(serializableGuest);
+    reloadWithHash()
   } catch (error) {
     console.error("Error updating guests:", error);
   }

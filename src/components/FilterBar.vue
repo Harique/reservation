@@ -17,6 +17,7 @@ import {
   getDateDifferenceInDays,
 } from "@/lib/utils";
 import { CalendarDate } from "@internationalized/date";
+import { useRoute } from "vue-router";
 const props = defineProps<{
   renderCreateNew: boolean;
   type: string;
@@ -27,6 +28,7 @@ const emit = defineEmits<{
 }>();
 
 let guests = ref<Guest[]>([]);
+
 
 const dateRange = ref({ start: undefined, end: undefined });
 const guestFilter: GuestFilter = reactive<GuestFilter>({
@@ -57,7 +59,6 @@ async function handleFilter() {
   try {
     const plainGuest = toRaw(guestFilter);
     Number(plainGuest.nights)
-    console.log(plainGuest)
     const guestList = await filterGuests(guests.value, plainGuest);
     emit("update:filteredGuests", guestList);
   } catch (error) {
