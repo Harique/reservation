@@ -4,7 +4,7 @@ import Status from "./ui/status/Status.vue";
 import { Guest } from "@/db/models/DbModels/GuestsSchema";
 import DialogEdit from "./DialogEdit.vue";
 const props = defineProps<{ guest: Guest }>();
-
+console.log(props.guest)
 const dateIn = formatDate(props.guest.check_in!);
 const dateOut = formatDate(props.guest.check_out!);
 </script>

@@ -12,14 +12,14 @@ const props = defineProps<{
       <p>Name</p>
       <p>Room</p>
       <p>Check-in</p>
-      <p>Check-in</p>
+      <p>Check-out</p>
       <p>Nights</p>
       <div id="options">Options</div>
     </div>
     <div class="guest-list">
       <GuestRow
-        v-for="(guest, index) in props.guests"
-        :key="index"
+        v-for="guest in props.guests"
+        :key="guest.id"
         :guest="guest"
       ></GuestRow>
     </div>

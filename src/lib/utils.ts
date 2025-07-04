@@ -41,7 +41,7 @@ export function filterGuests(
   guests: Guest[],
   filter: Partial<GuestFilter>
 ): Guest[] {
-  return guests.filter((guest) => {
+  const filteredGuests = guests.filter((guest) => {
     return Object.entries(filter).every(([key, value]) => {
       if (value === undefined || value === null) return true;
 
@@ -59,7 +59,72 @@ export function filterGuests(
         const filterNights = Number(value);
         return guest.nights === filterNights;
       }
+      if (key === "name") {
+        const guestName = guest.name?.toLowerCase() || "";
+        const filterName = (value as string)?.toLowerCase() || "";
+        return guestName.includes(filterName);
+      }
       return guest[key as keyof Guest] === value;
     });
+  });
+
+  // Sort by relevance
+  return filteredGuests.sort((a, b) => {
+    let scoreA = 0;
+    let scoreB = 0;
+
+    Object.entries(filter).forEach(([key, value]) => {
+      if (value === undefined || value === null) return;
+
+      if (key === "name") {
+        const guestNameA = a.name?.toLowerCase() || "";
+        const guestNameB = b.name?.toLowerCase() || "";
+        const filterName = (value as string)?.toLowerCase() || "";
+        
+        // Exact match gets highest score
+        if (guestNameA === filterName) scoreA += 100;
+        if (guestNameB === filterName) scoreB += 100;
+        
+        // Starts with filter gets high score
+        if (guestNameA.startsWith(filterName)) scoreA += 50;
+        if (guestNameB.startsWith(filterName)) scoreB += 50;
+        
+        // Earlier position of match gets higher score
+        const indexA = guestNameA.indexOf(filterName);
+        const indexB = guestNameB.indexOf(filterName);
+        if (indexA !== -1) scoreA += (20 - indexA);
+        if (indexB !== -1) scoreB += (20 - indexB);
+      }
+      
+      // Exact matches for other fields get high scores
+      if (key === "room" && a.room === value) scoreA += 30;
+      if (key === "room" && b.room === value) scoreB += 30;
+      
+      if (key === "status" && a.status === value) scoreA += 30;
+      if (key === "status" && b.status === value) scoreB += 30;
+      
+      if (key === "nights" && a.nights === Number(value)) scoreA += 20;
+      if (key === "nights" && b.nights === Number(value)) scoreB += 20;
+      
+      // Date matches get moderate scores
+      if (key === "check_in" || key === "check_out") {
+        const guestDateA = a[key as "check_in" | "check_out"];
+        const guestDateB = b[key as "check_in" | "check_out"];
+        const filterDate = value as Date;
+        
+        if (guestDateA?.year === filterDate.year && 
+            guestDateA?.month === filterDate.month && 
+            guestDateA?.day === filterDate.day) {
+          scoreA += 25;
+        }
+        if (guestDateB?.year === filterDate.year && 
+            guestDateB?.month === filterDate.month && 
+            guestDateB?.day === filterDate.day) {
+          scoreB += 25;
+        }
+      }
+    });
+
+    return scoreB - scoreA; // Higher score first
   });
 }
