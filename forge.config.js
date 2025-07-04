@@ -1,6 +1,7 @@
 const { FusesPlugin } = require("@electron-forge/plugin-fuses");
 const { FuseV1Options, FuseVersion } = require("@electron/fuses");
 const {AutoUnpackNativesPlugin} = require("@electron-forge/plugin-auto-unpack-natives")
+const { PublisherGithub } = require('@electron-forge/publisher-github');
 
 
 module.exports = {
@@ -25,6 +26,18 @@ module.exports = {
     {
       name: "@electron-forge/maker-rpm",
       config: {},
+    },
+  ],
+  publishers: [
+    {
+      name: '@electron-forge/publisher-github',
+      config: {
+        repository: {
+          owner: 'Harique',
+          name: 'reservation',
+        },
+        prerelease: false,
+      },
     },
   ],
   plugins: [
