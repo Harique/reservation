@@ -120,7 +120,7 @@ const handleSubmit =async () => {
             <CalendarPicker
               @update:dateRange="handleDateRangeChange"
             ></CalendarPicker>
-            <h1 v-if="dateError == true">CALENDAR ERROR</h1>
+            <p class="dateError" v-if="dateError">Date already taken</p>
           </div>
         </div>
 
@@ -172,5 +172,12 @@ const handleSubmit =async () => {
   border: 1px solid;
   border-radius: 5px;
   padding: 0.5rem 0.75rem 0.5rem 0.75rem;
+}
+.dateError{
+  margin-top: 10px;
+  color: #E74040;
+  font-size: 14px;
+  line-height: 14px;
+  font-weight: 400;
 }
 </style>

@@ -157,10 +157,10 @@ function updateGuest(guest: Guest) {
   );
 }
 
-function isDateTaken(check_in: DateObject, check_out: DateObject,room:string): boolean {
+function isDateTaken(check_in: DateObject, check_out: DateObject,room:string,id?:number): boolean {
   // Get all active guests from the database
   const activeGuests = getActiveGuests();
-  const filteredGuests = activeGuests.filter(g => g.room === room)
+  const filteredGuests = activeGuests.filter(g => g.room === room && (id ? g.id !== id : true))
 
   // Convert the requested dates to Date objects for comparison
   const requestedCheckIn = dateObjectToDate(check_in);

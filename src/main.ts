@@ -94,9 +94,9 @@ ipcMain.handle("db:updateGuest", async (_event, guest: Guest) => {
     throw error;
   }
 });
-ipcMain.handle("db:isDateTaken", async (_event, check_in: DateObject, check_out: DateObject,room:string) => {
+ipcMain.handle("db:isDateTaken", async (_event, check_in: DateObject, check_out: DateObject,room:string,id?: number) => {
   try {
-    return isDateTaken(check_in,check_out,room);
+    return isDateTaken(check_in,check_out,room,id);
   } catch (error) {
     console.error("Database error:", error);
     throw error;

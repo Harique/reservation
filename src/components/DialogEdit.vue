@@ -17,7 +17,7 @@ import {
   Guest,
   PaymentType,
   Status,
-  DateObject
+  DateObject,
 } from "@/db/models/DbModels/GuestsSchema";
 import { computed, reactive, ref, toRaw, watch } from "vue";
 import { convertIntoDate, getDateDifferenceInDays } from "@/lib/utils";
@@ -34,15 +34,15 @@ type DateRange = {
 const props = defineProps<{
   guest: Guest;
 }>();
-
-const route = useRoute()
+let dateError = ref<boolean>(false);
+const route = useRoute();
 
 const reloadWithHash = () => {
   // Set the hash to current route
-  window.location.hash = route.fullPath
+  window.location.hash = route.fullPath;
   // Reload
-  window.location.reload()
-}
+  window.location.reload();
+};
 
 // Initialize with guest's existing dates or default dates
 const getInitialDateRange = (): DateRange => {
@@ -77,27 +77,31 @@ async function updateGuest(guestInfo: Guest) {
     const serializableGuest = {
       ...guestInfo,
       // Ensure dates are plain objects, not complex Date/CalendarDate objects
-      check_in: guestInfo.check_in ? {
-        year: guestInfo.check_in.year,
-        month: guestInfo.check_in.month,
-        day: guestInfo.check_in.day
-      } : undefined,
-      check_out: guestInfo.check_out ? {
-        year: guestInfo.check_out.year,
-        month: guestInfo.check_out.month,
-        day: guestInfo.check_out.day
-      } : undefined,
+      check_in: guestInfo.check_in
+        ? {
+            year: guestInfo.check_in.year,
+            month: guestInfo.check_in.month,
+            day: guestInfo.check_in.day,
+          }
+        : undefined,
+      check_out: guestInfo.check_out
+        ? {
+            year: guestInfo.check_out.year,
+            month: guestInfo.check_out.month,
+            day: guestInfo.check_out.day,
+          }
+        : undefined,
     };
-    
+
     window.electronAPI.updateGuest(serializableGuest);
-    reloadWithHash()
+    reloadWithHash();
   } catch (error) {
     console.error("Error updating guests:", error);
   }
 }
 
 const updatedGuest = reactive<Guest>({
-  id:props.guest.id,
+  id: props.guest.id,
   name: props.guest.name,
   room: props.guest.room,
   check_in: props.guest.check_in,
@@ -121,10 +125,32 @@ const isFormValid = computed(() => {
   );
 });
 
-const handleSubmit = () => {
+const handleSubmit = async () => {
   if (isFormValid.value === true) {
-    const plainGuest = toRaw(updatedGuest);
-    updateGuest(plainGuest);
+    const plainGuest = await toRaw(updatedGuest);
+    const checkInDate:DateObject = {
+      year: plainGuest.check_in!.year,
+      month: plainGuest.check_in!.month,
+      day: plainGuest.check_in!.day
+    };
+    
+    const checkOutDate:DateObject = {
+      year: plainGuest.check_out!.year,
+      month: plainGuest.check_out!.month,
+      day: plainGuest.check_out!.day
+    };
+    const isDateTaken = await window.electronAPI.isDateTaken(
+      checkInDate,
+      checkOutDate,
+      plainGuest.room,
+      plainGuest.id
+    );
+
+    if (isDateTaken === true) {
+      dateError.value = true;
+    } else {
+      updateGuest(plainGuest);
+    }
   } else {
     alert("Please fill in all required fields");
   }
@@ -188,6 +214,7 @@ watch(
               v-model:dateRange="dateRange"
               :initial-date="initialDate"
             />
+            <p class="dateError" v-if="dateError">Date already taken</p>
           </div>
         </div>
 
@@ -240,5 +267,12 @@ watch(
   border: 1px solid;
   border-radius: 5px;
   padding: 0.5rem 0.75rem 0.5rem 0.75rem;
+}
+.dateError {
+  margin-top: 10px;
+  color: #e74040;
+  font-size: 14px;
+  line-height: 14px;
+  font-weight: 400;
 }
 </style>
