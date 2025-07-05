@@ -1,7 +1,7 @@
 {
   "name": "electron-vue-ts-boiler",
   "productName": "electron-vue-ts-boiler",
-  "version": "1.0.0",
+  "version": "1.0.5",
   "description": "My Electron application description",
   "main": ".vite/build/main.js",
   "scripts": {
@@ -50,5 +50,16 @@
     "tw-animate-css": "^1.3.4",
     "vue": "^3.5.17",
     "vue-router": "^4.5.1"
-  }
+  },
+  "publishers": [
+    {
+      "name": "@electron-forge/publisher-github",
+      "config": {
+        "repository": {
+          "owner": "Harique",
+          "name": "reservation"
+        }
+      }
+    }
+  ]
 }
