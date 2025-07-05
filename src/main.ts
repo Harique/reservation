@@ -16,7 +16,7 @@ const createWindow = (): void => {
   const mainWindow = new BrowserWindow({
     width: 1500,
     height: 981,
-    //autoHideMenuBar: true, // This hides the menu bar
+    autoHideMenuBar: true, // This hides the menu bar
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       
@@ -32,7 +32,7 @@ const createWindow = (): void => {
     );
     mainWindow.loadURL(`file://${filePath}#/`); // The #/ sets the route to root
   }
-  mainWindow.webContents.openDevTools();
+  //mainWindow.webContents.openDevTools();
 };
 
 app.whenReady().then(() => {

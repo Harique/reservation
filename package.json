@@ -1,7 +1,7 @@
 {
   "name": "electron-vue-ts-boiler",
   "productName": "electron-vue-ts-boiler",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "My Electron application description",
   "main": ".vite/build/main.js",
   "scripts": {
