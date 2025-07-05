@@ -17,6 +17,7 @@ import {
   Guest,
   PaymentType,
   Status,
+  DateObject
 } from "@/db/models/DbModels/GuestsSchema";
 import { computed, reactive, ref, toRaw, watch } from "vue";
 import { convertIntoDate, getDateDifferenceInDays } from "@/lib/utils";

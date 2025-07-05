@@ -11,6 +11,8 @@ export const statusVariants = cva(
           'bg-[#E8FFF3] text-[#50CD89] w-[51px] h-[26px] rounded-[4px] font-semibold leading-[12px] text-xs',
         Reserved:
           'bg-[#FFF8DD] text-[#F6C000] w-[69px] h-[26px] rounded-[4px] font-semibold leading-[12px] text-xs',
+        Pending:
+          'bg-[#FEDBBF] text-[#E77C40] w-[69px] h-[26px] rounded-[4px] font-semibold leading-[12px] text-xs',
         Finished:
           'bg-[#FFF5F8] text-[#F1416C] w-[64px] h-[26px] rounded-[4px] font-semibold leading-[12px] text-xs',
         Cancelled:

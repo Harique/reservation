@@ -5,11 +5,12 @@ enum PaymentType {
 }
 enum Status {
   Active = "Active",
+  Pending= 'Pending',
   Reserved = "Reserved",
   Finished = "Finished",
   Cancelled = "Cancelled",
 }
-interface Date {
+interface DateObject {
   year: number ;
   month: number ;
   day: number ;
@@ -21,8 +22,8 @@ interface Guest {
   room: string;
   status: Status;
   nights: number;
-  check_in: Date | undefined;
-  check_out: Date | undefined;
+  check_in: DateObject | undefined;
+  check_out: DateObject | undefined;
   paymentType: PaymentType;
   notes: string;
 }
@@ -32,8 +33,8 @@ interface GuestFilter {
   room?: string;
   status?: Status;
   nights?: number;
-  check_in?: Date;
-  check_out?: Date ;
+  check_in?: DateObject;
+  check_out?: DateObject ;
   paymentType?: PaymentType;
   notes?: string;
 }
@@ -50,4 +51,4 @@ interface GuestRetrieve {
 }
 
 
-export { Guest, Status, PaymentType, Date,GuestRetrieve,GuestFilter };
+export { Guest, Status, PaymentType, DateObject,GuestRetrieve,GuestFilter };

@@ -1,6 +1,6 @@
 import Database from "better-sqlite3";
 import { database } from "../db/models/dbmanager";
-import { Guest, GuestRetrieve, Date, GuestFilter } from "../db/models/DbModels/GuestsSchema";
+import { Guest, GuestRetrieve, GuestFilter, DateObject } from "../db/models/DbModels/GuestsSchema";
 import { fileURLToPath } from "node:url";
 
 function getAllGuests() {
@@ -14,7 +14,7 @@ function getAllGuests() {
 function getActiveGuests(): Guest[] {
   const stmt: Database.Statement<[], GuestRetrieve> = database.prepare(`
         SELECT * FROM Guests 
-        WHERE status IN ('Active', 'Reserved')
+        WHERE status IN ('Active', 'Reserved','Pending')
         ORDER BY 
           CASE status 
             WHEN 'Active' THEN 1
@@ -29,8 +29,8 @@ function getActiveGuests(): Guest[] {
     room: guest.room,
     status: guest.status,
     nights: guest.nights,
-    check_in: JSON.parse(guest.check_in) as Date, // Parse JSON back to Date
-    check_out: JSON.parse(guest.check_out) as Date, // Parse JSON back to Date
+    check_in: JSON.parse(guest.check_in) as DateObject, // Parse JSON back to Date
+    check_out: JSON.parse(guest.check_out) as DateObject, // Parse JSON back to Date
     paymentType: guest.paymentType,
     notes: guest.notes,
   }));
@@ -53,8 +53,8 @@ function getFinishedGuests(): Guest[] {
     room: guest.room,
     status: guest.status,
     nights: guest.nights,
-    check_in: JSON.parse(guest.check_in) as Date, // Parse JSON back to Date
-    check_out: JSON.parse(guest.check_out) as Date, // Parse JSON back to Date
+    check_in: JSON.parse(guest.check_in) as DateObject, // Parse JSON back to Date
+    check_out: JSON.parse(guest.check_out) as DateObject, // Parse JSON back to Date
     paymentType: guest.paymentType,
     notes: guest.notes,
   }));

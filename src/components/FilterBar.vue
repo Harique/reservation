@@ -14,10 +14,7 @@ import { onMounted, reactive, ref, toRaw, watch } from "vue";
 import {
   convertIntoDate,
   filterGuests,
-  getDateDifferenceInDays,
 } from "@/lib/utils";
-import { CalendarDate } from "@internationalized/date";
-import { useRoute } from "vue-router";
 const props = defineProps<{
   renderCreateNew: boolean;
   type: string;
@@ -60,7 +57,6 @@ async function handleFilter() {
     const plainGuest = toRaw(guestFilter);
     Number(plainGuest.nights)
     const guestList = await filterGuests(guests.value, plainGuest);
-    console.log(guestList)
     emit("update:filteredGuests", guestList);
   } catch (error) {
     console.log(error);
@@ -78,10 +74,6 @@ watch(
         newVal.start,
         newVal.end
       ).checkOutDate;
-      guestFilter.nights = getDateDifferenceInDays(
-        newVal.start as CalendarDate,
-        newVal.end as CalendarDate
-      );
     }
   },
 
