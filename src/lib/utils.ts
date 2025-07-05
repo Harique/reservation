@@ -37,11 +37,15 @@ export function convertIntoDate(checkIn: CalendarDate, checkOut: CalendarDate) {
   };
   return { checkInDate, checkOutDate };
 }
+export function dateObjectToDate(dateObj: DateObject): Date {
+  return new Date(dateObj.year, dateObj.month - 1, dateObj.day); // month is 0-indexed in Date constructor
+}
 
 export function formatDate(date: DateObject) {
   const newDate = `${date.year}/${date.month}/${date.day}`;
   return newDate;
 }
+
 export function filterGuests(
   guests: Guest[],
   filter: Partial<GuestFilter>

@@ -8,8 +8,9 @@ import {
   updateGuest,
   getFinishedGuests,
   getActiveGuests,
+  isDateTaken,
 } from "./lib/services";
-import { Guest } from "./db/models/DbModels/GuestsSchema";
+import { DateObject, Guest } from "./db/models/DbModels/GuestsSchema";
 
 const createWindow = (): void => {
   const mainWindow = new BrowserWindow({
@@ -88,6 +89,14 @@ ipcMain.handle("db:removeGuest", async (_event, id: number) => {
 ipcMain.handle("db:updateGuest", async (_event, guest: Guest) => {
   try {
     return updateGuest(guest);
+  } catch (error) {
+    console.error("Database error:", error);
+    throw error;
+  }
+});
+ipcMain.handle("db:isDateTaken", async (_event, check_in: DateObject, check_out: DateObject,room:string) => {
+  try {
+    return isDateTaken(check_in,check_out,room);
   } catch (error) {
     console.error("Database error:", error);
     throw error;

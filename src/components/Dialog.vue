@@ -13,8 +13,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Select from "./Select.vue";
 import CalendarPicker from "./CalendarPicker.vue";
-import { Guest, PaymentType, Status } from "@/db/models/DbModels/GuestsSchema";
-import { computed, reactive, toRaw } from "vue";
+import { DateObject, Guest, PaymentType, Status } from "@/db/models/DbModels/GuestsSchema";
+import { computed, reactive, ref, toRaw } from "vue";
 import { convertIntoDate, getDateDifferenceInDays } from "@/lib/utils";
 import { CalendarDate } from "@internationalized/date";
 import { DateRange } from "reka-ui";
@@ -29,6 +29,7 @@ const reloadWithHash = () => {
   // Reload
   window.location.reload()
 }
+let dateError = ref<boolean>(false)
 
 async function addGuest(guestInfo: Guest) {
   try {
@@ -46,7 +47,7 @@ const guest = reactive<Guest>({
   nights: 0,
   status: Status.Reserved,
   paymentType: PaymentType.Other,
-  notes: "", 
+  notes: "",
 });
 
 function handleDateRangeChange(dateRange: DateRange) {
@@ -76,12 +77,20 @@ const isFormValid = computed(() => {
     guest.check_in !== undefined &&
     guest.check_out !== undefined &&
     guest.notes.trim() !== ""
+
   );
 });
-const handleSubmit = () => {
+const handleSubmit =async () => {
   if (isFormValid.value === true) {
     const plainGuest = toRaw(guest);
-    addGuest(plainGuest);
+    const isDateTaken = await window.electronAPI.isDateTaken(plainGuest.check_in!,plainGuest.check_out!,plainGuest.room)
+    
+    if (isDateTaken === true) {
+      dateError.value = true
+    }else{
+      addGuest(plainGuest);
+    }
+    
 
   } else {
     alert("Please fill in all required fields");
@@ -111,6 +120,7 @@ const handleSubmit = () => {
             <CalendarPicker
               @update:dateRange="handleDateRangeChange"
             ></CalendarPicker>
+            <h1 v-if="dateError == true">CALENDAR ERROR</h1>
           </div>
         </div>
 

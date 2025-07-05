@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer } from "electron";
-import { Guest, GuestRetrieve } from "./db/models/DbModels/GuestsSchema";
+import { DateObject, Guest, GuestRetrieve } from "./db/models/DbModels/GuestsSchema";
 contextBridge.exposeInMainWorld("electronAPI", {
   // Add your API methods here
   // Example: openFile: () => ipcRenderer.invoke('dialog:openFile'),
@@ -9,6 +9,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
     ipcRenderer.invoke("db:findGuests", guestFilter),
   removeGuest: (id: number) => ipcRenderer.invoke("db:removeGuest", id),
   updateGuest: (guest: Guest) => ipcRenderer.invoke("db:updateGuest", guest),
+  isDateTaken: (check_in: DateObject, check_out: DateObject,room:string) => ipcRenderer.invoke("db:isDateTaken", check_in,check_out,room),
 });
 declare global {
   interface Window {
@@ -18,6 +19,7 @@ declare global {
       findGuests: (guestFilter: Partial<Guest>) => Guest[];
       removeGuest: (id: number) => number;
       updateGuest: (guest: Guest) => void;
+      isDateTaken:(check_in: DateObject, check_out: DateObject,room:string) => boolean
     };
   }
 }

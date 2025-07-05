@@ -2,6 +2,9 @@ import Database from "better-sqlite3";
 import { database } from "../db/models/dbmanager";
 import { Guest, GuestRetrieve, GuestFilter, DateObject } from "../db/models/DbModels/GuestsSchema";
 import { fileURLToPath } from "node:url";
+import { toDate } from "reka-ui/date";
+import {dateObjectToDate} from './utils'
+import { ActivitySquare } from "lucide-vue-next";
 
 function getAllGuests() {
   let stmt: Database.Statement<[], Guest> = database.prepare(
@@ -154,6 +157,31 @@ function updateGuest(guest: Guest) {
   );
 }
 
+function isDateTaken(check_in: DateObject, check_out: DateObject,room:string): boolean {
+  // Get all active guests from the database
+  const activeGuests = getActiveGuests();
+  const filteredGuests = activeGuests.filter(g => g.room === room)
+
+  // Convert the requested dates to Date objects for comparison
+  const requestedCheckIn = dateObjectToDate(check_in);
+  const requestedCheckOut = dateObjectToDate(check_out);
+  
+  // Check if the requested date range overlaps with any existing reservation
+  for (const guest of filteredGuests) {
+    const existingCheckIn = dateObjectToDate(guest.check_in as DateObject);
+    const existingCheckOut = dateObjectToDate(guest.check_out as DateObject);
+    
+    // Check for overlap: two date ranges overlap if one starts before the other ends
+    // and vice versa. We need to check if:
+    // - The requested check-in is before the existing check-out, AND
+    // - The requested check-out is after the existing check-in
+    if (requestedCheckIn < existingCheckOut && requestedCheckOut > existingCheckIn) {
+      return true; // Date range is taken (overlap found)
+    }
+  }
+  
+return false; // No overlap found, date range is available
+}
 export {
   getAllGuests,
   addGuest,
@@ -162,4 +190,5 @@ export {
   updateGuest,
   getFinishedGuests,
   getActiveGuests,
+  isDateTaken
 };
