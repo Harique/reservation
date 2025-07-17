@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import type { DateRange } from "reka-ui";
+import type { DateRange, DateValue } from "reka-ui";
 import {
   Calendar,
   CalendarDate,
   DateFormatter,
   getLocalTimeZone,
+  toCalendarDate,
 } from "@internationalized/date";
 
-import { type Ref, ref, onMounted, watchEffect } from "vue";
+import { type Ref, ref, onMounted, watchEffect, computed } from "vue";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -16,6 +17,7 @@ import {
 } from "@/components/ui/popover";
 import { RangeCalendar } from "@/components/ui/range-calendar";
 import { watch } from "vue";
+import { UnfoldVertical } from "lucide-vue-next";
 
 const emit = defineEmits<{
   "update:dateRange": [value: DateRange];
@@ -23,8 +25,28 @@ const emit = defineEmits<{
 
 const props = defineProps<{
   initialDate?: DateRange;
+  room?: string;
 }>();
 
+
+const unavailableDates = ref<CalendarDate[]>([]);
+
+onMounted(async () => {
+  if (props.room) {
+    unavailableDates.value = await window.electronAPI.getUnAvailableDates(
+      props.room
+    );
+  }
+});
+
+function isDateUnavailable(date: any): boolean {
+  const calDate = toCalendarDate(date);
+  return unavailableDates.value.some(d =>
+    d.day === calDate.day &&
+    d.month === calDate.month &&
+    d.year === calDate.year
+  );
+}
 const df = new DateFormatter("en-US", {
   dateStyle: "medium",
 });
@@ -83,6 +105,7 @@ watch(
         initial-focus
         :number-of-months="2"
         @update:start-value="(startDate) => (value.start = startDate)"
+        :is-date-unavailable="isDateUnavailable"
       />
     </PopoverContent>
   </Popover>

@@ -33,7 +33,9 @@ type DateRange = {
 
 const props = defineProps<{
   guest: Guest;
+  roomName?: string;
 }>();
+
 let dateError = ref<boolean>(false);
 const route = useRoute();
 
@@ -213,6 +215,7 @@ watch(
             <CalendarPicker
               v-model:dateRange="dateRange"
               :initial-date="initialDate"
+              :room="props.roomName ? props.roomName : undefined"
             />
             <p class="dateError" v-if="dateError">Date already taken</p>
           </div>

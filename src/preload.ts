@@ -2,8 +2,8 @@ import { contextBridge, ipcRenderer } from "electron";
 import {
   DateObject,
   Guest,
-  GuestRetrieve,
 } from "./db/models/DbModels/GuestsSchema";
+import { CalendarDate } from "@internationalized/date";
 contextBridge.exposeInMainWorld("electronAPI", {
   // Add your API methods here
   // Example: openFile: () => ipcRenderer.invoke('dialog:openFile'),
@@ -19,6 +19,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
     room: string,
     id?: number
   ) => ipcRenderer.invoke("db:isDateTaken", check_in, check_out, room,id),
+  getUnAvailableDates:(room: string) => ipcRenderer.invoke("db:getUnAvailableDates", room),
 });
 declare global {
   interface Window {
@@ -34,6 +35,7 @@ declare global {
         room: string,
         id?: number
       ) => boolean;
+      getUnAvailableDates: (room: string) => Promise<CalendarDate[]>;
     };
   }
 }

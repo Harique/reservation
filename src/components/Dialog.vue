@@ -20,7 +20,9 @@ import { CalendarDate } from "@internationalized/date";
 import { DateRange } from "reka-ui";
 import Textarea from "./ui/textarea/Textarea.vue";
 import { useRoute } from "vue-router";
-
+const props = defineProps<{
+  roomName?: string;
+}>();
 const route = useRoute()
 
 const reloadWithHash = () => {
@@ -119,6 +121,7 @@ const handleSubmit =async () => {
           <div class="items-center gap-4">
             <CalendarPicker
               @update:dateRange="handleDateRangeChange"
+              :room="props.roomName ? props.roomName : undefined"
             ></CalendarPicker>
             <p class="dateError" v-if="dateError">Date already taken</p>
           </div>

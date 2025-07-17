@@ -104,7 +104,6 @@ export function filterGuests(
   });
 
   // Sort by relevance
-  // Sort by relevance
   return filteredGuests.sort((a, b) => {
     let scoreA = 0;
     let scoreB = 0;

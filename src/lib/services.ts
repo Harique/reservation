@@ -1,10 +1,16 @@
 import Database from "better-sqlite3";
 import { database } from "../db/models/dbmanager";
-import { Guest, GuestRetrieve, GuestFilter, DateObject } from "../db/models/DbModels/GuestsSchema";
+import {
+  Guest,
+  GuestRetrieve,
+  GuestFilter,
+  DateObject,
+} from "../db/models/DbModels/GuestsSchema";
 import { fileURLToPath } from "node:url";
-import { toDate } from "reka-ui/date";
-import {dateObjectToDate} from './utils'
+import { DateValue, toDate } from "reka-ui/date";
+import { dateObjectToDate } from "./utils";
 import { ActivitySquare } from "lucide-vue-next";
+import { CalendarDate, startOfWeek } from "@internationalized/date";
 
 function getAllGuests() {
   let stmt: Database.Statement<[], Guest> = database.prepare(
@@ -125,7 +131,7 @@ function findGuests(filter: Partial<GuestFilter>): Guest[] {
   }
   const stmt: Database.Statement<(string | number)[], Guest> =
     database.prepare(sql);
-  
+
   return stmt.all(...values);
 }
 
@@ -157,31 +163,75 @@ function updateGuest(guest: Guest) {
   );
 }
 
-function isDateTaken(check_in: DateObject, check_out: DateObject,room:string,id?:number): boolean {
+function getUnAvailableDates(room: string): CalendarDate[] {
+  const activeGuests = getActiveGuests();
+  const filteredGuests = activeGuests.filter((g) => g.room === room);
+  
+  return filteredGuests.flatMap((guest) => {
+    const checkIn = dateObjectToDate(guest.check_in as DateObject);
+    const checkOut = dateObjectToDate(guest.check_out as DateObject);
+    
+    const dates: CalendarDate[] = [];
+    
+    // Convert to CalendarDate (note: month is 1-based in CalendarDate)
+    let currentDate = new CalendarDate(
+      checkIn.getFullYear(), 
+      checkIn.getMonth() + 1,  // +1 because getMonth() is 0-based
+      checkIn.getDate()
+    );
+    
+    const endDate = new CalendarDate(
+      checkOut.getFullYear(), 
+      checkOut.getMonth() + 1, 
+      checkOut.getDate()
+    );
+    
+    // Generate all dates between check-in and check-out
+    while (currentDate.compare(endDate) <= 0) {
+      dates.push(currentDate);
+      currentDate = currentDate.add({ days: 1 });
+    }
+    
+    return dates;
+  });
+}
+
+function isDateTaken(
+  check_in: DateObject,
+  check_out: DateObject,
+  room: string,
+  id?: number
+): boolean {
   // Get all active guests from the database
   const activeGuests = getActiveGuests();
-  const filteredGuests = activeGuests.filter(g => g.room === room && (id ? g.id !== id : true))
+  const filteredGuests = activeGuests.filter(
+    (g) => g.room === room && (id ? g.id !== id : true)
+  );
 
   // Convert the requested dates to Date objects for comparison
   const requestedCheckIn = dateObjectToDate(check_in);
   const requestedCheckOut = dateObjectToDate(check_out);
-  
+
   // Check if the requested date range overlaps with any existing reservation
   for (const guest of filteredGuests) {
     const existingCheckIn = dateObjectToDate(guest.check_in as DateObject);
     const existingCheckOut = dateObjectToDate(guest.check_out as DateObject);
-    
+
     // Check for overlap: two date ranges overlap if one starts before the other ends
     // and vice versa. We need to check if:
     // - The requested check-in is before the existing check-out, AND
     // - The requested check-out is after the existing check-in
-    if (requestedCheckIn < existingCheckOut && requestedCheckOut > existingCheckIn) {
+    if (
+      requestedCheckIn < existingCheckOut &&
+      requestedCheckOut > existingCheckIn
+    ) {
       return true; // Date range is taken (overlap found)
     }
   }
-  
-return false; // No overlap found, date range is available
+
+  return false; // No overlap found, date range is available
 }
+
 export {
   getAllGuests,
   addGuest,
@@ -190,5 +240,6 @@ export {
   updateGuest,
   getFinishedGuests,
   getActiveGuests,
-  isDateTaken
+  isDateTaken,
+  getUnAvailableDates
 };

@@ -86,6 +86,7 @@ onMounted(async () => {
       fetchedGuests = await fetchedGuests.filter(
         (g) => g.room === props.roomName
       );
+
     }
     guests.value = fetchedGuests;
     emit("update:filteredGuests", fetchedGuests);
@@ -137,7 +138,7 @@ onMounted(async () => {
       <Button class="button" id="clear" @click="filterReset"> Clear </Button>
     </div>
     <div v-if="props.renderCreateNew == true" class="create-new">
-      <Dialog class="button"> Create New </Dialog>
+      <Dialog class="button" :roomName="props.roomName"> Create New </Dialog>
     </div>
   </div>
 </template>
