@@ -40,10 +40,41 @@ export function convertIntoDate(checkIn: CalendarDate, checkOut: CalendarDate) {
 export function dateObjectToDate(dateObj: DateObject): Date {
   return new Date(dateObj.year, dateObj.month - 1, dateObj.day); // month is 0-indexed in Date constructor
 }
+export function dateObjectToCalendarDate(dateObj: DateObject): CalendarDate {
+  const date = new Date(dateObj.year, dateObj.month - 1, dateObj.day); // month is 0-indexed in Date constructor
+  const calendarDate = new CalendarDate(
+    date.getFullYear(),
+    date.getMonth() + 1, // +1 because getMonth() is 0-based
+    date.getDate()
+  );
+  return calendarDate
+}
+
+export function dateToCalendarDate(Date: Date): CalendarDate {
+  // Convert to CalendarDate (note: month is 1-based in CalendarDate)
+  let calendarDate = new CalendarDate(
+    Date.getFullYear(),
+    Date.getMonth() + 1, // +1 because getMonth() is 0-based
+    Date.getDate()
+  );
+  return calendarDate;
+}
 
 export function formatDate(date: DateObject) {
   const newDate = `${date.year}/${date.month}/${date.day}`;
   return newDate;
+}
+export function getInBetweenDates(
+  startDate: CalendarDate,
+  endDate: CalendarDate
+) {
+  // Generate all dates between check-in and check-out
+  let dates: CalendarDate[] = [];
+  while (startDate.compare(endDate) <= 0) {
+    dates.push(startDate);
+    startDate = startDate.add({ days: 1 });
+  }
+  return dates;
 }
 
 export function filterGuests(

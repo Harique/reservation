@@ -18,6 +18,7 @@ import {
 import { RangeCalendar } from "@/components/ui/range-calendar";
 import { watch } from "vue";
 import { UnfoldVertical } from "lucide-vue-next";
+import { getInBetweenDates } from "@/lib/utils";
 
 const emit = defineEmits<{
   "update:dateRange": [value: DateRange];
@@ -26,25 +27,47 @@ const emit = defineEmits<{
 const props = defineProps<{
   initialDate?: DateRange;
   room?: string;
+  isDialogEdit: boolean;
+  guestDateStart?: CalendarDate;
+  guestDateEnd?: CalendarDate;
 }>();
-
 
 const unavailableDates = ref<CalendarDate[]>([]);
 
 onMounted(async () => {
   if (props.room) {
-    unavailableDates.value = await window.electronAPI.getUnAvailableDates(
+    const allUnavailableDates = await window.electronAPI.getUnAvailableDates(
       props.room
     );
+
+    if (props.isDialogEdit === false) {
+      unavailableDates.value = allUnavailableDates;
+    } else {
+      const inBetweenDate = getInBetweenDates(
+        props.guestDateStart!,
+        props.guestDateEnd!
+      );
+
+      unavailableDates.value = allUnavailableDates.filter(
+        (d) =>
+          !inBetweenDate.some(
+            (betweenDate) =>
+              betweenDate.day === d.day &&
+              betweenDate.month === d.month &&
+              betweenDate.year === d.year
+          )
+      );
+    }
   }
 });
 
 function isDateUnavailable(date: any): boolean {
   const calDate = toCalendarDate(date);
-  return unavailableDates.value.some(d =>
-    d.day === calDate.day &&
-    d.month === calDate.month &&
-    d.year === calDate.year
+  return unavailableDates.value.some(
+    (d) =>
+      d.day === calDate.day &&
+      d.month === calDate.month &&
+      d.year === calDate.year
   );
 }
 const df = new DateFormatter("en-US", {

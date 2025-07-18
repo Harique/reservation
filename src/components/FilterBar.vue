@@ -127,6 +127,7 @@ onMounted(async () => {
       <CalendarPicker
         v-model:dateRange="dateRange"
         class="calendar"
+        :isDialogEdit="false"
       ></CalendarPicker>
       <Select
         title="Payment Type"

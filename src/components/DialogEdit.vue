@@ -20,7 +20,7 @@ import {
   DateObject,
 } from "@/db/models/DbModels/GuestsSchema";
 import { computed, reactive, ref, toRaw, watch } from "vue";
-import { convertIntoDate, getDateDifferenceInDays } from "@/lib/utils";
+import { convertIntoDate, dateObjectToCalendarDate, dateObjectToDate, getDateDifferenceInDays } from "@/lib/utils";
 import { CalendarDate } from "@internationalized/date";
 import Textarea from "./ui/textarea/Textarea.vue";
 import { useRoute } from "vue-router";
@@ -35,6 +35,9 @@ const props = defineProps<{
   guest: Guest;
   roomName?: string;
 }>();
+//NOTE:THIS IS HORRIBLE, BUT I DONT HAVE ENOUGH TIME TO FIX IT
+const guestDateStart = dateObjectToCalendarDate(props.guest.check_in!) 
+const guestDateEnd = dateObjectToCalendarDate(props.guest.check_out!)
 
 let dateError = ref<boolean>(false);
 const route = useRoute();
@@ -216,6 +219,9 @@ watch(
               v-model:dateRange="dateRange"
               :initial-date="initialDate"
               :room="props.roomName ? props.roomName : undefined"
+              :isDialogEdit="true"
+              :guestDateStart="guestDateStart"
+              :guestDateEnd="guestDateEnd"
             />
             <p class="dateError" v-if="dateError">Date already taken</p>
           </div>

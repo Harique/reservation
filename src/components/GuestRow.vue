@@ -6,6 +6,7 @@ import DialogEdit from "./DialogEdit.vue";
 const props = defineProps<{ guest: Guest }>();
 const dateIn = formatDate(props.guest.check_in!);
 const dateOut = formatDate(props.guest.check_out!);
+
 </script>
 
 <template>
@@ -18,7 +19,7 @@ const dateOut = formatDate(props.guest.check_out!);
     <div>{{ dateIn }}</div>
     <div>{{ dateOut }}</div>
     <div>{{ props.guest.nights }}</div>
-    <DialogEdit :guest="props.guest"></DialogEdit>
+    <DialogEdit :guest="props.guest" :roomName="props.guest.room"></DialogEdit>
   </div>
 </template>
 <style scoped>

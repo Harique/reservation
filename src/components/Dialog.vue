@@ -122,6 +122,7 @@ const handleSubmit =async () => {
             <CalendarPicker
               @update:dateRange="handleDateRangeChange"
               :room="props.roomName ? props.roomName : undefined"
+              :isDialogEdit="false"
             ></CalendarPicker>
             <p class="dateError" v-if="dateError">Date already taken</p>
           </div>
