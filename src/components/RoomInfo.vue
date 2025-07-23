@@ -1,10 +1,20 @@
 <script setup lang="ts">
 import FilterBar from "./FilterBar.vue";
 import GuestList from "./GuestList.vue";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { Guest } from "@/db/models/DbModels/GuestsSchema";
+import { sortGuestsByCheckIn } from "@/lib/utils";
+
 const props = defineProps<{ roomName: string }>();
 let guests = ref<Guest[]>([]);
+
+watch(guests, (newGuests) => {
+  if (newGuests) {
+    guests.value = sortGuestsByCheckIn(newGuests); // ✅ this is OK
+  }
+});
+
+
 </script>
 
 <template>

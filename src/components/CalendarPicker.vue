@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import type { DateRange, DateValue } from "reka-ui";
+import type { DateRange} from "reka-ui";
 import {
-  Calendar,
   CalendarDate,
   DateFormatter,
   getLocalTimeZone,
   toCalendarDate,
 } from "@internationalized/date";
 
-import { type Ref, ref, onMounted, watchEffect, computed } from "vue";
+import { type Ref, ref, onMounted, watchEffect} from "vue";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -17,7 +16,6 @@ import {
 } from "@/components/ui/popover";
 import { RangeCalendar } from "@/components/ui/range-calendar";
 import { watch } from "vue";
-import { UnfoldVertical } from "lucide-vue-next";
 import { getInBetweenDates } from "@/lib/utils";
 
 const emit = defineEmits<{

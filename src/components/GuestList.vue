@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Guest } from "@/db/models/DbModels/GuestsSchema";
 import GuestRow from "./GuestRow.vue";
+
 const props = defineProps<{
   guests: Guest[];
 }>();

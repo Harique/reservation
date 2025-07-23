@@ -49,6 +49,20 @@ export function dateObjectToCalendarDate(dateObj: DateObject): CalendarDate {
   );
   return calendarDate
 }
+export function sortGuestsByCheckIn (guests: Guest[]): Guest[] {
+  return guests.sort((a, b) => {
+    // Handle undefined dates
+    if (!a.check_in && !b.check_in) return 0;
+    if (!a.check_in) return 1; // Put undefined dates at the end
+    if (!b.check_in) return -1;
+
+    // Convert DateObject to Date and compare
+    const dateA = new Date(a.check_in.year, a.check_in.month - 1, a.check_in.day);
+    const dateB = new Date(b.check_in.year, b.check_in.month - 1, b.check_in.day);
+    
+    return dateA.getTime() - dateB.getTime();
+  });
+};
 
 export function dateToCalendarDate(Date: Date): CalendarDate {
   // Convert to CalendarDate (note: month is 1-based in CalendarDate)
