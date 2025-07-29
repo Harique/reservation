@@ -1,44 +1,8 @@
 <script setup lang="ts">
-import { Guest, PaymentType, Status } from "@/db/models/DbModels/GuestsSchema";
-import { useRouter } from "vue-router";
-import { CalendarDate, today } from "@internationalized/date";
-import { convertIntoDate, getDateDifferenceInDays } from "@/lib/utils";
-import HoverComp from "./HoverComp.vue";
 
-async function findGuest() {
-  const filter: Partial<Guest> = {
-    status: Status.Cancelled,
-  };
-  const guest = await window.electronAPI.findGuests(filter);
-}
-async function removeGuest() {
-  try {
-    const remove = window.electronAPI.removeGuest(1);
-  } catch (error) {
-    console.error("Error removing guests:", error);
-  }
-}
-async function updateGuest() {
-  const time = today("Africa/Algiers");
-  const check_in = new CalendarDate(time.year, time.month, time.day);
-  const check_out = new CalendarDate(time.year, time.month, time.day).add({
-    days: 20,
-  });
-  const dates = convertIntoDate(check_in, check_out);
-  const nights = getDateDifferenceInDays(check_in, check_out);
-  const updatedGuest: Guest = {
-    id:1,
-    name: "KARIM",
-    room: "2_3",
-    status: Status.Cancelled,
-    paymentType: PaymentType.AirBnB,
-    check_in: dates.checkInDate,
-    check_out: dates.checkOutDate,
-    nights: nights,
-    notes: "HI NOTES :D",
-  };
-  window.electronAPI.updateGuest(updatedGuest)
-}
+import { useRouter } from "vue-router";
+
+import HoverComp from "./HoverComp.vue";
 
 const router = useRouter();
 function navigate(pageName: string, params?: Record<string, any>) {
@@ -72,6 +36,13 @@ function navigate(pageName: string, params?: Record<string, any>) {
               <div class="left">
                 <img src="/user-edit.png" alt="" />
                 <h1>Guests</h1>
+              </div>
+              <img src="/down.png" alt="right-arrow" />
+            </div>
+             <div class="tab" @click="navigate('Available Dates Room')">
+              <div class="left">
+                <img src="/calendar-search.png" alt="" />
+                <h1>AvailableDates</h1>
               </div>
               <img src="/down.png" alt="right-arrow" />
             </div>
@@ -128,7 +99,7 @@ function navigate(pageName: string, params?: Record<string, any>) {
   padding: 0 50px 25px 40px;
   gap: 5px;
   height: 100%;
-  max-height: 188px;
+
   border-bottom: 1px solid #3f4254;
 }
 .dashboard .title {
@@ -142,7 +113,7 @@ function navigate(pageName: string, params?: Record<string, any>) {
   display: flex;
   flex-direction: column;
   height: 100%;
-  max-height: 144px;
+
   width: 100%;
 }
 .dashboard .tabs .tab {
@@ -180,7 +151,7 @@ function navigate(pageName: string, params?: Record<string, any>) {
   top: 40px;
 }
 .help {
-  height: 100%;
+
   display: flex;
   padding: 0 50px 15px 40px;
   justify-content: flex-end;

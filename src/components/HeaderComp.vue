@@ -4,8 +4,11 @@ import { useRoute } from "vue-router";
 const router = useRoute();
 
 const pageName = () => {
+  
   return router.name?.toString();
+
 };
+
 </script>
 
 <template>

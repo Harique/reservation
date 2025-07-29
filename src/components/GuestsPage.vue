@@ -9,14 +9,18 @@ import { sortGuestsByCheckIn } from "@/lib/utils";
 let guests = ref<Guest[]>([]);
 watch(guests, (newGuests) => {
   if (newGuests) {
-    guests.value = sortGuestsByCheckIn(newGuests); // ✅ this is OK
+    guests.value = sortGuestsByCheckIn(newGuests);
   }
 });
 </script>
 
 <template>
   <div class="container">
-    <FilterBar :render-create-new=true type="active" v-model:filtered-guests="guests"></FilterBar>
+    <FilterBar
+      :render-create-new="true"
+      type="active"
+      v-model:filtered-guests="guests"
+    ></FilterBar>
     <GuestList :guests="guests"></GuestList>
   </div>
 </template>

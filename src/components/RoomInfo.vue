@@ -10,7 +10,7 @@ let guests = ref<Guest[]>([]);
 
 watch(guests, (newGuests) => {
   if (newGuests) {
-    guests.value = sortGuestsByCheckIn(newGuests); // ✅ this is OK
+    guests.value = sortGuestsByCheckIn(newGuests);
   }
 });
 
