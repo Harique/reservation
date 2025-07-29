@@ -30,7 +30,6 @@ async function getAvailableDatesForRoom(
   room: string,
   Date: DateRange
 ): Promise<CalendarDate[]> {
-
   if (!Date.end) return [];
 
   const startDate = new CalendarDate(
@@ -69,16 +68,14 @@ async function getAvailableDatesForRoom(
 }
 
 async function lol(dateRange: DateRange) {
-  let allDates: Record<string,CalendarDate[]> = {};
-  
-  rooms.forEach(async (room) => {
-    const dates = await getAvailableDatesForRoom(room, dateRange);
+  let allDates: Record<string, CalendarDate[]> = {};
 
-    allDates[room] = dates
-    
-    //console.log(`room ${room} has these dates ${allDates[room]}`);
-  });
-  console.log(allDates)
+  for (const room of rooms) {
+    const dates = await getAvailableDatesForRoom(room, dateRange);
+    allDates[room] = dates;
+  }
+
+  console.log(dateRange, { allDates, "1-4": allDates["1-4"] });
 }
 </script>
 
