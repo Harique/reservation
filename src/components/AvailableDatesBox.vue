@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { CalendarDate } from "@internationalized/date";
 const props = defineProps<{
   roomName:string,
-  availableDates?:CalendarDate[]
+  availableDates:CalendarDate[]
 }>();
 const isExpanded = ref(true)
 
@@ -30,8 +30,8 @@ const isExpanded = ref(true)
           <div class="dates-subtitle">Select a date for booking</div>
         </div>
 
-        <div class="dates-list">
-         {{ props.availableDates }}
+        <div class="dates-list" v-for="date in props.availableDates">
+         {{ date.year }}/{{ date.month }}/{{ date.day }}
          
         </div>
       </div>

@@ -68,14 +68,12 @@ async function getAvailableDatesForRoom(
 }
 
 async function lol(dateRange: DateRange) {
-  let allDates: Record<string, CalendarDate[]> = {};
 
   for (const room of rooms) {
     const dates = await getAvailableDatesForRoom(room, dateRange);
-    allDates[room] = dates;
+    availableDates[room] = dates;
   }
 
-  console.log(dateRange, { allDates, "1-4": allDates["1-4"] });
 }
 </script>
 
