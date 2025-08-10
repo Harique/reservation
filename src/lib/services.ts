@@ -203,9 +203,10 @@ function isDateTaken(
   id?: number
 ): boolean {
   // Get all active guests from the database
+  let noSpaces:string = room.replace(/\s+/g, "");
   const activeGuests = getActiveGuests();
   const filteredGuests = activeGuests.filter(
-    (g) => g.room === room && (id ? g.id !== id : true)
+    (g) => g.room === noSpaces && (id ? g.id !== id : true)
   );
 
   // Convert the requested dates to Date objects for comparison
